@@ -8,13 +8,13 @@ use haridarshan\Instagram\InstagramOAuthException;
  * Instagram API class
  *
  * API Documentation: http://instagram.com/developer/
- * Class Documentation: 
+ * Class Documentation: https://github.com/haridarshan/Instagram-php
  *
  * @author Haridarshan Gorana
- * @date May 09, 2016
- * @copyright Haridarshan Gorana - JetSynthesys Pvt Ltd.
+ * @since May 09, 2016
+ * @copyright Haridarshan Gorana
  * @version 1.0
- * @license 
+ * @license: GNU GPL v3 License
  */
 class Instagram{
 	/*
