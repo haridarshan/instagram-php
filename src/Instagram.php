@@ -55,7 +55,7 @@ class Instagram{
 	 * Instagram Available Scope
 	 * @var: array of strings
 	 */
-	private $_scopes = array("basic", "public_content", "follower_list", "comments", "relationships", "likes");
+	private $_scopes = array();
 	
 	/*
 	 * Header signed
@@ -100,7 +100,7 @@ class Instagram{
 		}elseif( is_string($config) ){
 			$this->setClientId($config);
 		}else{
-			throw new InstagramException('__construct() - Invalid Instagram Configuration data');
+			throw new InstagramException('Invalid Instagram Configuration data');
 			exit();
 		}
 	}
@@ -113,18 +113,25 @@ class Instagram{
      *
      * @return string
      */
-	public function getUrl($path, array $parameters){		
-		if( is_array($parameters) and count(array_intersect($parameters['scope'], $this->_scopes)) === count($parameters['scope']) ){
+	public function getUrl($path, array $parameters){
+		
+		if( isset($parameters['scope']) ){
+			$this->_scopes = $parameters['scope']; 
+		}
+		
+		if( is_array($parameters) ){
 			$query = 'client_id='. $this->getClientId() .'&redirect_uri='. urlencode($this->getCallbackUrl()) .'&response_type=code';
 			
-			$scope = urlencode(str_replace(",", " ", implode(",", $parameters['scope'])));
-			
-			$query .= "&scope=$scope";
+			if( isset($this->_scopes) ){
+				$scope = urlencode(str_replace(",", " ", implode(",", $parameters['scope'])));
+
+				$query .= "&scope=$scope";
+			}
 			
 			return sprintf('%s/%s?%s', self::API_CORE, $path, $query);
 		}
 		
-		throw new InstagramOAuthException("getUrl() - Invalid scope permissions used.");
+		throw new InstagramOAuthException("Invalid scope permissions used.");
 	}
 	
 	/*
@@ -148,7 +155,7 @@ class Instagram{
 		$result = $this->__CurlCall($apihost, $options, 'POST');
 		
 		if( isset($result->code) ){
-			throw new InstagramOAuthException("__CurlCall() return status code: ". $result->code ." type: ". $result->error_type ." message: ". $result->error_message );
+			throw new InstagramOAuthException("return status code: ". $result->code ." type: ". $result->error_type ." message: ". $result->error_message );
 		}
 				
 		$this->setAccessToken($result);
@@ -202,7 +209,7 @@ class Instagram{
 			$authentication_method = '?client_id=' . $this->getClientId();
 		}else{
 			if( !isset($this->_access_token) ){
-				throw new InstagramException("__request() | $api - api requires an authenticated users access token.");
+				throw new InstagramException("$api - api requires an authenticated users access token.");
 				exit();
 			}
 			
@@ -281,7 +288,7 @@ class Instagram{
 		}
 		
 		if (!$json) {
-			throw new InstagramException('__CurlCall() - cURL error: ' . curl_error($ch));
+			throw new InstagramException('cURL error: ' . curl_error($ch));
 			exit();
 		}
 		curl_close($ch);
