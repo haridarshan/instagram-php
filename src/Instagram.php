@@ -61,7 +61,7 @@ class Instagram{
 	 * Header signed
 	 * @var: boolean
 	 */ 
-	private $_signed = false;
+	private $_signed = true;
 	
 	/*
 	 * Curl timeout
