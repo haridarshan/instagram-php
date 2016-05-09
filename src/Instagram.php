@@ -1,8 +1,8 @@
 <?php
-namespace Jet\Instagram;
+namespace haridarshan\Instagram;
 
-use Jet\Instagram\InstagramException;
-use Jet\Instagram\InstagramOAuthException;
+use haridarshan\Instagram\InstagramException;
+use haridarshan\Instagram\InstagramOAuthException;
 
 /**
  * Instagram API class

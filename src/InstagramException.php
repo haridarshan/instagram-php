@@ -1,5 +1,5 @@
 <?php
-namespace Jet\Instagram;
+namespace haridarshan\Instagram;
 
 class InstagramException extends \Exception{
 	
