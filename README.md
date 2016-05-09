@@ -5,11 +5,10 @@ Installation/Usage
 ------------------
 Download the Instagram-php Library
 Add autoload.php in your PHP script
+
     ```
-    require 'autoload.php'
-    ```
+    require 'autoload.php';
     
-    ```
     use Jet\Instagram\Instagram;
     
     $instagram = new Instagram(array(
