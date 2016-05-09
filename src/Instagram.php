@@ -245,7 +245,7 @@ class Instagram{
      * @throws \Jet\Instagram\InstagramException
      */
 	private function __CurlCall($host, $data, $method = 'GET', $headers = true){
-		$this->printData($host);
+		
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $host);		
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
