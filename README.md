@@ -3,6 +3,13 @@ Easy-to-use PHP Library for Instagram APIs (Beta)
 
 Installation/Usage
 ------------------
+Composer Installation
+```
+composer require haridarshan/instagram-php
+```
+
+OR
+
 Download the Instagram-php Library
 Add autoload.php in your PHP script
 
