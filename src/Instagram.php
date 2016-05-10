@@ -1,8 +1,15 @@
 <?php
+<<<<<<< HEAD
 namespace Haridarshan\Instagram;
 
 use Haridarshan\Instagram\InstagramException;
 use Haridarshan\Instagram\InstagramOAuthException;
+=======
+namespace haridarshan\Instagram;
+
+use haridarshan\Instagram\InstagramException;
+use haridarshan\Instagram\InstagramOAuthException;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 
 /**
  * Instagram API class
@@ -31,30 +38,47 @@ class Instagram{
 	 * Client Id
 	 * @var: string
 	 */
+<<<<<<< HEAD
 	private $client_id;
+=======
+	private $_client_id;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	
 	/*
 	 * Client Secret
 	 * @var: string
 	 */
+<<<<<<< HEAD
 	private $client_secret;
+=======
+	private $_client_secret;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	
 	/*
 	 * Instagram Callback url
 	 * @var: string
 	 */
+<<<<<<< HEAD
 	private $callback_url;
+=======
+	private $_callback_url;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	
 	/*
 	 * Oauth Access Token
 	 * @var: string
 	 */
+<<<<<<< HEAD
 	private $access_token;
+=======
+	private $_access_token;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	
 	/*
 	 * Instagram Available Scope
 	 * @var: array of strings
 	 */
+<<<<<<< HEAD
 	private $scopes = array();
 	
 	/*
@@ -62,25 +86,46 @@ class Instagram{
 	 * @var: boolean
 	 */ 
 	private $secure = true;
+=======
+	private $_scopes = array();
+	
+	/*
+	 * Header signed
+	 * @var: boolean
+	 */ 
+	private $_signed = true;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	
 	/*
 	 * Curl timeout
 	 * @var: integer|decimal|long
 	 */
+<<<<<<< HEAD
 	private $timeout = 90;
+=======
+	private $_timeout = 90;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	
 	/*
 	 * Curl Connect timeout
 	 * @var: integer|decimal|long
 	 */
+<<<<<<< HEAD
 	private $connect_timeout = 20;
+=======
+	private $_connect_timeout = 20;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	
 	/*
 	 * Remaining Rate Limit
 	 * Sandbox = 500
 	 * Live = 5000
 	 */
+<<<<<<< HEAD
 	private $x_rate_limit_remaining = 500;
+=======
+	private $_x_rate_limit_remaining = 500;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 		
 	/*
 	 * Default Constructor 
@@ -89,6 +134,7 @@ class Instagram{
 	 * @return: void
 	 */
 	public function __construct($config){		
+<<<<<<< HEAD
 		if (is_object($config)) {
 			$this->setClientId($config->ClientId);
 			$this->setClientSecret($config->ClientSecret);
@@ -100,6 +146,19 @@ class Instagram{
 		} elseif (is_string($config)) {
 			$this->setClientId($config);
 		} else {
+=======
+		if( is_object($config) ){
+			$this->setClientId($config->ClientId);
+			$this->setClientSecret($config->ClientSecret);
+			$this->setCallbackUrl($config->Callback);			
+		}elseif( is_array($config) ){			
+			$this->setClientId($config['ClientId']);
+			$this->setClientSecret($config['ClientSecret']);
+			$this->setCallbackUrl($config['Callback']);	
+		}elseif( is_string($config) ){
+			$this->setClientId($config);
+		}else{
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 			throw new InstagramException('Invalid Instagram Configuration data');
 			exit();
 		}
@@ -115,6 +174,7 @@ class Instagram{
      */
 	public function getUrl($path, array $parameters){
 		
+<<<<<<< HEAD
 		if (isset($parameters['scope'])) {
 			$this->scopes = $parameters['scope']; 
 		}
@@ -123,6 +183,16 @@ class Instagram{
 			$query = 'client_id='. $this->getClientId() .'&redirect_uri='. urlencode($this->getCallbackUrl()) .'&response_type=code';
 			
 			if (isset($this->scopes)) {
+=======
+		if( isset($parameters['scope']) ){
+			$this->_scopes = $parameters['scope']; 
+		}
+		
+		if( is_array($parameters) ){
+			$query = 'client_id='. $this->getClientId() .'&redirect_uri='. urlencode($this->getCallbackUrl()) .'&response_type=code';
+			
+			if( isset($this->_scopes) ){
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 				$scope = urlencode(str_replace(",", " ", implode(",", $parameters['scope'])));
 
 				$query .= "&scope=$scope";
@@ -152,9 +222,15 @@ class Instagram{
 		
 		$apihost = self::API_CORE.'/'.$path;
 		
+<<<<<<< HEAD
 		$result = $this->curlCall($apihost, $options, 'POST');
 		
 		if (isset($result->code)) {
+=======
+		$result = $this->__CurlCall($apihost, $options, 'POST');
+		
+		if( isset($result->code) ){
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 			throw new InstagramOAuthException("return status code: ". $result->code ." type: ". $result->error_type ." message: ". $result->error_message );
 		}
 				
@@ -173,12 +249,21 @@ class Instagram{
 	 *
 	 * return string (Signature)
 	 */
+<<<<<<< HEAD
 	protected function secureRequest($endpoint, $auth, $params){	
 		if (!is_array($params)) {
 			$params = array();	
 		}
 		
 		if ($auth) {
+=======
+	private function __secureRequest($endpoint, $auth, $params){	
+		if( !is_array($params) ){
+			$params = array();	
+		}
+		
+		if( $auth ){
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 			list($key, $value) = explode("=", substr($auth, 1), 2);
 			$params[$key] = $value;
 		}
@@ -202,6 +287,7 @@ class Instagram{
 	 * @param string $method - GET|POST
 	 *
 	 */
+<<<<<<< HEAD
 	protected function requestCall($api, $authentication = false, $params = null, $method = 'GET'){
 			
 		// If api call doesn't requires authentication
@@ -209,6 +295,15 @@ class Instagram{
 			$authentication_method = '?client_id=' . $this->getClientId();
 		} else {
 			if (!isset($this->access_token)) {
+=======
+	protected function __request($api, $authentication = false, $params = null, $method = 'GET'){
+			
+		// If api call doesn't requires authentication
+		if( !$authentication ){
+			$authentication_method = '?client_id=' . $this->getClientId();
+		}else{
+			if( !isset($this->_access_token) ){
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 				throw new InstagramException("$api - api requires an authenticated users access token.");
 				exit();
 			}
@@ -224,11 +319,19 @@ class Instagram{
 		
 		$apihost = self::API_HOST .'/'. $api . $authentication_method . (('GET' === $method) ? $param : null);
 				
+<<<<<<< HEAD
 		if ($this->secure) {
             $apihost .= (strstr($apihost, '?') ? '&' : '?') . 'sig=' . $this->secureRequest($api, $authentication_method, $params);
         }
 		
 		$json = $this->curlCall($apihost, $param, 'GET');
+=======
+		if ($this->_signed) {
+            $apihost .= (strstr($apihost, '?') ? '&' : '?') . 'sig=' . $this->__secureRequest($api, $authentication_method, $params);
+        }
+		
+		$json = $this->__CurlCall($apihost, $param, 'GET');
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 		
 		return $json;
 	}
@@ -244,7 +347,11 @@ class Instagram{
      *
      * @throws \haridarshan\Instagram\InstagramException
      */
+<<<<<<< HEAD
 	private function curlCall($host, $data, $method = 'GET', $headers = true){
+=======
+	private function __CurlCall($host, $data, $method = 'GET', $headers = true){
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 		
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $host);		
@@ -254,6 +361,7 @@ class Instagram{
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->getTimeout());
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->getConnectTimeout());		
 		
+<<<<<<< HEAD
 		if ($headers == true) {
 			curl_setopt($ch, CURLOPT_HEADER, true);	
 		}
@@ -264,6 +372,18 @@ class Instagram{
 					curl_setopt($ch, CURLOPT_POST, count($data));
 					curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 				} else {
+=======
+		if( $headers == true ){
+			curl_setopt($ch, CURLOPT_HEADER, true);	
+		}
+		
+		switch($method){
+			case 'POST':
+				if( is_array($data) ){
+					curl_setopt($ch, CURLOPT_POST, count($data));
+					curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+				}else{
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 					curl_setopt($ch, CURLOPT_POST, count($data));
 					curl_setopt($ch, CURLOPT_POSTFIELDS, ltrim($data, '&'));
 				}
@@ -275,16 +395,27 @@ class Instagram{
 		
         $json = curl_exec($ch);
 		
+<<<<<<< HEAD
 		if ($headers == true) {
+=======
+		if( $headers == true ){
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 			// split header from response data
 			// and assign each to a variable
 			list($headercontent, $json) = explode("\r\n\r\n", $json, 2);
 
 			// convert header content into an array
+<<<<<<< HEAD
 			$getheaders = $this->processHeaders($headercontent);
 
 			// get the 'X-Ratelimit-Remaining' header value
 			$this->x_rate_limit_remaining = $headers['X-Ratelimit-Remaining'];
+=======
+			$getheaders = $this->_processHeaders($headercontent);
+
+			// get the 'X-Ratelimit-Remaining' header value
+			$this->_x_rate_limit_remaining = $headers['X-Ratelimit-Remaining'];
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 		}
 		
 		if (!$json) {
@@ -302,6 +433,7 @@ class Instagram{
 	 * return mixed
 	 */
 	public function request($path, $params = null){
+<<<<<<< HEAD
 		if ($this->x_rate_limit_remaining < 1) {
 			throw new InstagramException("You have reached Instagram API Rate Limit");
 			exit();
@@ -311,6 +443,17 @@ class Instagram{
 			}
 			
 			return $this->requestCall($path, true, $params);			
+=======
+		if( $this->_x_rate_limit_remaining < 1 ){
+			throw new InstagramException("You have reached Instagram API Rate Limit");
+			exit();
+		}else{
+			if( isset($params['access_token']) and !isset($this->_access_token) ){
+				$this->setAccessToken($params['access_token']);	
+			}
+			
+			return $this->__request($path, true, $params);			
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 		}
 	}
 	
@@ -321,7 +464,11 @@ class Instagram{
 	 * @return: void
 	 */
 	public function setClientId($clientId){
+<<<<<<< HEAD
 		$this->client_id = $clientId;	
+=======
+		$this->_client_id = $clientId;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -329,7 +476,11 @@ class Instagram{
 	 * @return: string
 	 */
 	public function getClientId(){
+<<<<<<< HEAD
 		return $this->client_id;	
+=======
+		return $this->_client_id;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -338,7 +489,11 @@ class Instagram{
 	 * @return: void
 	 */
 	public function setClientSecret($secret){
+<<<<<<< HEAD
 		$this->client_secret = $secret;	
+=======
+		$this->_client_secret = $secret;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -346,7 +501,11 @@ class Instagram{
 	 * @return: string
 	 */
 	public function getClientSecret(){
+<<<<<<< HEAD
 		return $this->client_secret;	
+=======
+		return $this->_client_secret;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -355,7 +514,11 @@ class Instagram{
 	 * @return: void
 	 */
 	public function setCallbackUrl($url){
+<<<<<<< HEAD
 		$this->callback_url = $url;	
+=======
+		$this->_callback_url = $url;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -363,7 +526,11 @@ class Instagram{
 	 * @return: string
 	 */
 	public function getCallbackUrl(){
+<<<<<<< HEAD
 		return $this->callback_url;	
+=======
+		return $this->_callback_url;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -372,7 +539,11 @@ class Instagram{
 	 * @return: void
 	 */
 	public function setTimeout($time = 90){
+<<<<<<< HEAD
 		$this->timeout = $time;	
+=======
+		$this->_timeout = $time;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -380,7 +551,11 @@ class Instagram{
 	 * @return: integer|decimal|long
 	 */
 	public function getTimeout(){
+<<<<<<< HEAD
 		return $this->timeout;	
+=======
+		return $this->_timeout;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -389,7 +564,11 @@ class Instagram{
 	 * @return: void
 	 */
 	public function setConnectTimeout($time = 20){
+<<<<<<< HEAD
 		$this->connect_timeout = $time;	
+=======
+		$this->_connect_timeout = $time;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -397,7 +576,11 @@ class Instagram{
 	 * @return: integer|decimal|long
 	 */
 	public function getConnectTimeout(){
+<<<<<<< HEAD
 		return $this->connect_timeout;	
+=======
+		return $this->_connect_timeout;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}
 	
 	/*
@@ -406,7 +589,11 @@ class Instagram{
 	 * @return: void
 	 */
 	public function setRequestSecure($secure){
+<<<<<<< HEAD
 		$this->secure = $secure;	
+=======
+		$this->_signed = $secure;	
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
 	}	
 	
 	/*
@@ -418,7 +605,11 @@ class Instagram{
      */
     private function setAccessToken($data){		
         $token = is_object($data) ? $data->access_token : $data;
+<<<<<<< HEAD
         $this->access_token = $token;
+=======
+        $this->_access_token = $token;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
     }
 	
     /*
@@ -427,7 +618,11 @@ class Instagram{
      * @return string
      */
     private function getAccessToken(){
+<<<<<<< HEAD
         return $this->access_token;
+=======
+        return $this->_access_token;
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
     }
 	
 	/*
@@ -437,7 +632,11 @@ class Instagram{
      *
      * @return array
      */
+<<<<<<< HEAD
     protected function processHeaders($content){
+=======
+    private function _processHeaders($content){
+>>>>>>> d70794b1756c72ede570206aa374b6e04ad591ec
         $headers = array();
         foreach (explode("\r\n", $content) as $i => $line) {
             if ($i === 0) {
