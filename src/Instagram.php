@@ -14,7 +14,7 @@ use Haridarshan\Instagram\InstagramOAuthException;
  * @author Haridarshan Gorana
  * @since May 09, 2016
  * @copyright Haridarshan Gorana
- * @version 1.0.0
+ * @version 1.0
  * @license: GNU GPL v3 License
  */
 class Instagram{
