@@ -14,7 +14,7 @@ Download the Instagram-php Library
 Add autoload.php in your PHP script
 
 ```
-require 'autoload.php';
+require 'vendor/autoload.php';
 
 use Jet\Instagram\Instagram;
 
