@@ -20,5 +20,12 @@
         "psr-4": {
             "Haridarshan\\Instagram\\": "src/"
         }
-    }
+    },
+	{
+		"extra": {
+			"branch-alias": {
+				"dev-master": "1.0.x-dev"
+			}
+		}
+	}
 }
