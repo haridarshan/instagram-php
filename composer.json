@@ -1,0 +1,25 @@
+{
+    "name": "haridarshan/instagram-php",
+    "description": "Implements the Instagram APIs specified by http://instagram.com/developer/",
+    "keywords": ["instagram", "instagram-api", "php"],
+    "type": "library",
+    "license": "GNU GPL v3",
+    "homepage": "https://github.com/haridarshan/instagram-php",
+    "authors": [
+        {
+            "name": "Haridarshan Gorana",
+            "email": "er.haridarshan@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "~6.0",
+        "guzzlehttp/psr7": "1.2.*",
+		"ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haridarshan\\Instagram\\": "src/"
+        }
+    }
+}
