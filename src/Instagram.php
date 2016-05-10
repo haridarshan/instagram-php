@@ -3,6 +3,7 @@ namespace Haridarshan\Instagram;
 
 use Haridarshan\Instagram\InstagramException;
 use Haridarshan\Instagram\InstagramOAuthException;
+use \Guzzle\
 
 /**
  * Instagram API class
