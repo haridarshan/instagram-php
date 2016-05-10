@@ -2,7 +2,11 @@
 namespace Haridarshan\Instagram;
 
 use Haridarshan\Instagram\InstagramException;
-use Haridarshan\Instagram\InstagramOAuthException;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * Instagram API class
@@ -18,6 +22,11 @@ use Haridarshan\Instagram\InstagramOAuthException;
  */
 class Instagram{
 	/*
+	 * Library Version
+	 */
+	const VERSION = '1.0';
+	
+	/*
 	 * API End Point
 	 */  
 	const API_HOST = 'https://api.instagram.com/v1';
@@ -25,7 +34,7 @@ class Instagram{
 	/*
 	 * API Core End Point
 	 */ 
-	const API_CORE = 'https://api.instagram.com';
+	const API_CORE = 'https://api.instagram.com/';
 	
 	/*
 	 * Client Id
@@ -52,7 +61,13 @@ class Instagram{
 	private $access_token;
 	
 	/*
-	 * Instagram Available Scope
+	 * Instagram Available Scopes
+	 * @var: array of strings
+	 */
+	private $default_scopes = array("basic", "public_content", "follower_list", "comments", "relationships", "likes");
+	
+	/*
+	 * User's Scope
 	 * @var: array of strings
 	 */
 	private $scopes = array();
@@ -81,6 +96,16 @@ class Instagram{
 	 * Live = 5000
 	 */
 	private $x_rate_limit_remaining = 500;
+	
+	/*
+	 * @var GuzzleHttp\ClientInterface $http
+	 */
+	private $client;
+	
+	/*
+	 * @var GuzzleHttp\Psr7\Response $response
+	 */
+	private $response;
 		
 	/*
 	 * Default Constructor 
@@ -113,13 +138,14 @@ class Instagram{
      *
      * @return string
      */
-	public function getUrl($path, array $parameters){
-		
-		if (isset($parameters['scope'])) {
-			$this->scopes = $parameters['scope']; 
-		}
-		
-		if (is_array($parameters)) {
+	public function getUrl($path, array $parameters){		
+		if (is_array($parameters)) {			
+			if (isset($parameters['scope']) and count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
+				$this->scopes = $parameters['scope']; 
+			}else{
+				throw new InstagramException("Missing or Invalid Scope permission used");
+			}
+			
 			$query = 'client_id='. $this->getClientId() .'&redirect_uri='. urlencode($this->getCallbackUrl()) .'&response_type=code';
 			
 			if (isset($this->scopes)) {
@@ -128,10 +154,9 @@ class Instagram{
 				$query .= "&scope=$scope";
 			}
 			
-			return sprintf('%s/%s?%s', self::API_CORE, $path, $query);
+			return sprintf('%s%s?%s', self::API_CORE, $path, $query);
 		}
-		
-		throw new InstagramOAuthException("Invalid scope permissions used.");
+		throw new InstagramException("Missing or Invalid Scope permission used");
 	}
 	
 	/*
@@ -152,17 +177,80 @@ class Instagram{
 		
 		$apihost = self::API_CORE.'/'.$path;
 		
-		$result = $this->curlCall($apihost, $options, 'POST');
+		$this->client = new Client([
+			'base_uri' => self::API_CORE
+		]);
 		
-		if (isset($result->code)) {
-			throw new InstagramOAuthException("return status code: ". $result->code ." type: ". $result->error_type ." message: ". $result->error_message );
+		
+		$this->execute($path, $options, 'POST');
+		
+		if (isset($this->response->code)) {
+			throw new InstagramException("return status code: ". $this->response->code ." type: ". $this->response->error_type ." message: ". $this->response->error_message );
 		}
 				
-		$this->setAccessToken($result);
-		
-		return !$token ? $result : $result->access_token;
+		$this->setAccessToken($this->response);
+				
+		return !$token ? $this->response : $this->response->access_token;
 	}
 	
+	/*
+	 * Method to make GuzzleHttp Client Request to Instagram APIs
+	 *
+	 * @param string $endpoint
+	 * @param array|string $options in case of POST [optional]
+	 * @param string $method GET|POST
+	 */
+	protected function execute($endpoint, $options, $method = 'GET'){
+		
+		if( !isset($this->client) ){
+			$this->client = new Client([
+				'base_uri' => self::API_CORE
+			]);
+		}	
+		switch ($method) {
+			case 'GET':
+				$result = $this->client->request(
+					$method, 
+					$endpoint, 
+					[
+						'headers' => [
+							'Accept'     => 'application/json'
+						]
+					]
+				);
+				$limit = $result->getHeader('x-ratelimit-remaining');
+				$this->x_rate_limit_remaining = $limit[0];
+				
+				$this->response = json_decode($result->getBody()->getContents());
+				
+				break;
+			case 'POST': 
+				if (is_array($options)) {
+					$body = http_build_query($options);
+				} else {
+					$body = ltrim($options, '&');
+				}
+				
+				try {
+					$this->response = json_decode($this->client->request(
+						$method, 
+						$endpoint, 
+						[
+							'headers' => [
+								'Accept'     => 'application/json'
+							],
+							'body' => $body
+						]
+					)->getBody()->getContents());
+				} catch (ClientException $e) {
+					throw new InstagramException($e->getMessage());
+				}
+				break;
+			case 'DELETE':
+				break;
+		}
+	}
+		
 	/*
 	 * Secure API Request by using endpoint, paramters and API secret
 	 * copy from Instagram API Documentation: https://www.instagram.com/developer/secure-api-requests/
@@ -193,124 +281,59 @@ class Instagram{
 		return hash_hmac('sha256', $signature, $this->getClientSecret(), false);
 	}
 	
-	/*
-	 * Request method to make api calls either secure or insecure
-	 *
-	 * @param string $api - API End Point to call
-	 * @param boolean $authentication - false api doesn't require authentication | true api requires authentication 
-	 * @param array|object|string|null $params 
-	 * @param string $method - GET|POST
-	 *
-	 */
-	protected function requestCall($api, $authentication = false, $params = null, $method = 'GET'){
-			
-		// If api call doesn't requires authentication
-		if (!$authentication) {
-			$authentication_method = '?client_id=' . $this->getClientId();
-		} else {
-			if (!isset($this->access_token)) {
-				throw new InstagramException("$api - api requires an authenticated users access token.");
-				exit();
-			}
-			
-			$authentication_method = '?access_token=' . $this->getAccessToken();
-		}
-		// This portion needs modification
-		$param = null;
-		
-		if (isset($params) and is_array($params) ) {
-			$param = '&' . http_build_query($params);	
-		}
-		
-		$apihost = self::API_HOST .'/'. $api . $authentication_method . (('GET' === $method) ? $param : null);
-				
-		if ($this->secure) {
-            $apihost .= (strstr($apihost, '?') ? '&' : '?') . 'sig=' . $this->secureRequest($api, $authentication_method, $params);
-        }
-		
-		$json = $this->curlCall($apihost, $param, 'GET');
-		
-		return $json;
-	}
-	
-	 /**
-     * The OAuth call Method.
-     *
-	 * @param string $host - OAuth host
-     * @param array $data The post API data
-	 * @param string $method - GET|POST|DELETE
-     *
-     * @return mixed
-     *
-     * @throws \haridarshan\Instagram\InstagramException
-     */
-	private function curlCall($host, $data, $method = 'GET', $headers = true){
-		
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $host);		
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $this->getTimeout());
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->getConnectTimeout());		
-		
-		if ($headers == true) {
-			curl_setopt($ch, CURLOPT_HEADER, true);	
-		}
-		
-		switch ($method) {
-			case 'POST':
-				if (is_array($data)) {
-					curl_setopt($ch, CURLOPT_POST, count($data));
-					curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-				} else {
-					curl_setopt($ch, CURLOPT_POST, count($data));
-					curl_setopt($ch, CURLOPT_POSTFIELDS, ltrim($data, '&'));
-				}
-				break;
-			case 'DELETE':
-				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-				break;
-		}
-		
-        $json = curl_exec($ch);
-		
-		if ($headers == true) {
-			// split header from response data
-			// and assign each to a variable
-			list($headercontent, $json) = explode("\r\n\r\n", $json, 2);
-
-			// convert header content into an array
-			$getheaders = $this->processHeaders($headercontent);
-
-			// get the 'X-Ratelimit-Remaining' header value
-			$this->x_rate_limit_remaining = $headers['X-Ratelimit-Remaining'];
-		}
-		
-		if (!$json) {
-			throw new InstagramException('cURL error: ' . curl_error($ch));
-			exit();
-		}
-		curl_close($ch);
-		return json_decode($json);
-		
-	}
-	
 	/* 
 	 * Method to make api requests
 	 *
 	 * return mixed
 	 */
-	public function request($path, $params = null){
+	public function request($path, $params = null, $method = 'GET'){
 		if ($this->x_rate_limit_remaining < 1) {
 			throw new InstagramException("You have reached Instagram API Rate Limit");
 			exit();
 		} else {
-			if (isset($params['access_token']) and !isset($this->access_token)) {
-				$this->setAccessToken($params['access_token']);	
+			$data = array();
+			if ($params != null){
+				$data = $params;	
 			}
 			
-			return $this->requestCall($path, true, $params);			
+			// If api call doesn't requires authentication
+			if (isset($params['access_token']) and !isset($this->access_token)) {
+				$this->setAccessToken($params['access_token']);	
+				
+				if (!isset($this->access_token)) {
+					throw new InstagramException("$path - api requires an authenticated users access token.");
+					exit();
+				}
+				
+				$authentication_method = '?access_token=' . $this->access_token;
+				// Need to remove the access_token from $params array
+				unset($params['access_token']);				
+			} else {
+				$authentication_method = '?client_id=' . $this->getClientId();
+				
+				$param = null;
+				
+				if (isset($params) and is_array($params) ) {
+					$param = '&' . http_build_query($params);	
+				}
+			}
+			
+			// This portion needs modification
+			$param = null;
+				
+			if (isset($params) and is_array($params) ) {
+				$param = '&' . http_build_query($params);	
+			}
+			
+			$endpoint = 'v1/'. $path . $authentication_method . (('GET' === $method) ? $param : null);
+			
+			if ($this->secure) {
+				$endpoint .= (strstr($endpoint, '?') ? '&' : '?') . 'sig=' . $this->secureRequest($path, $authentication_method, $data);
+			}
+						
+			$this->execute($endpoint, $data);
+			
+			return $this->response;		
 		}
 	}
 	
@@ -449,4 +472,13 @@ class Instagram{
         }
         return $headers;
     }
+	
+	/*
+	 * Get a string containing the version of the library.
+	 *
+	 * @return string
+	 */
+	public function getLibraryVersion(){
+		return self::VERSION;
+	}
 }
