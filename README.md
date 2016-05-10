@@ -1,5 +1,5 @@
 # Instagram-php
-PHP Library to use Instagram APIs
+Easy-to-use PHP Library for Instagram APIs
 
 Installation/Usage
 ------------------
