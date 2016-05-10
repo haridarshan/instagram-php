@@ -1,7 +1,7 @@
 {
     "name": "haridarshan/instagram-php",
     "description": "Implements the Instagram APIs specified by http://instagram.com/developer/",
-    "keywords": ["instagram", "instagram-api", "php instagram api"],
+    "keywords": ["instagram", "instagram-api", "php-instagram-api"],
     "type": "library",
     "license": "GNU GPL v3",
     "homepage": "https://github.com/haridarshan/instagram-php",
