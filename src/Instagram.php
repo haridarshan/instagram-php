@@ -242,7 +242,7 @@ class Instagram{
      *
      * @return mixed
      *
-     * @throws \Jet\Instagram\InstagramException
+     * @throws \haridarshan\Instagram\InstagramException
      */
 	private function __CurlCall($host, $data, $method = 'GET', $headers = true){
 		
@@ -309,26 +309,8 @@ class Instagram{
 			if( isset($params['access_token']) and !isset($this->_access_token) ){
 				$this->setAccessToken($params['access_token']);	
 			}
-			/*
-			$data = array();
-			foreach($params as $key => $value){
-				if($key != "access_token"){
-					$data[$key] = $value;
-				}
-			}
 			
-			if( is_array($data) and empty($data) ){
-				$data = null;	
-			}
-			*/
-			return $this->__request($path, true, $params);
-			/*
-			if( stripos($path, 'self') !== false and $params != null ){		
-				return $this->__request($path, true, $data);
-			}else{
-				return $this->__request($path, false, $data);
-			}
-			*/
+			return $this->__request($path, true, $params);			
 		}
 	}
 	
