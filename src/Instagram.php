@@ -4,7 +4,6 @@ namespace Haridarshan\Instagram;
 use Haridarshan\Instagram\InstagramException;
 use Haridarshan\Instagram\InstagramOAuthException;
 
-
 /**
  * Instagram API class
  *
