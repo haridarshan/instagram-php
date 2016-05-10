@@ -29,13 +29,13 @@ class Instagram{
 	/*
 	 * API End Point
 	 */  
-	const API_HOST = 'https://api.instagram.com/v1';
+	const API_VERSION = 'v1/';
 	
 	/*
-	 * API Core End Point
-	 */ 
-	const API_CORE = 'https://api.instagram.com/';
-	
+	 * API End Point
+	 */  
+	const API_HOST = 'https://api.instagram.com/';
+		
 	/*
 	 * Client Id
 	 * @var: string
@@ -154,7 +154,7 @@ class Instagram{
 				$query .= "&scope=$scope";
 			}
 			
-			return sprintf('%s%s?%s', self::API_CORE, $path, $query);
+			return sprintf('%s%s?%s', self::API_HOST, $path, $query);
 		}
 		throw new InstagramException("Missing or Invalid Scope permission used");
 	}
@@ -175,10 +175,10 @@ class Instagram{
 			"code" => $code
 		);
 		
-		$apihost = self::API_CORE.'/'.$path;
+		$apihost = self::API_HOST.'/'.$path;
 		
 		$this->client = new Client([
-			'base_uri' => self::API_CORE
+			'base_uri' => self::API_HOST
 		]);
 		
 		
@@ -204,7 +204,7 @@ class Instagram{
 		
 		if( !isset($this->client) ){
 			$this->client = new Client([
-				'base_uri' => self::API_CORE
+				'base_uri' => self::API_HOST
 			]);
 		}	
 		switch ($method) {
@@ -325,7 +325,7 @@ class Instagram{
 				$param = '&' . http_build_query($params);	
 			}
 			
-			$endpoint = 'v1/'. $path . $authentication_method . (('GET' === $method) ? $param : null);
+			$endpoint = self::API_VERSION. $path . $authentication_method . (('GET' === $method) ? $param : null);
 			
 			if ($this->secure) {
 				$endpoint .= (strstr($endpoint, '?') ? '&' : '?') . 'sig=' . $this->secureRequest($path, $authentication_method, $data);
