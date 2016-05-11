@@ -16,14 +16,14 @@ use GuzzleHttp\Exception\ClientException;
 * @author Haridarshan Gorana
 * @since May 09, 2016
 * @copyright Haridarshan Gorana
-* @version 1.0
+* @version 1.0.1
 * @license: GNU GPL v3 License
 */
 class Instagram {
 	/*
 	* Library Version
 	*/
-	const VERSION = '1.0';
+	const VERSION = '1.0.1';
 	
 	/*
 	* API End Point
