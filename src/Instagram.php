@@ -262,7 +262,7 @@ class Instagram {
 	* Method to make api requests
 	* @return mixed
 	*/
-	public function request($path, $params = null, $method = 'GET') {
+	public function request($path, array $params, $method = 'GET') {
 		if (!$this->x_rate_limit_remaining) {
 			throw new \Haridarshan\Instagram\InstagramException("You have reached Instagram API Rate Limit");
 		}
@@ -270,16 +270,16 @@ class Instagram {
 		if (!isset($params['access_token'])) {
 			throw new \Haridarshan\Instagram\InstagramException("$path - api requires an authenticated users access token.");
 		}
-
-		$data = ($params !== null) ? $params : array();	
+		
+		$data = $params;
 		
 		$this->setAccessToken($params['access_token']);	
-
+		
 		$authentication_method = '?access_token='.$this->access_token;
 		// Need to remove the access_token from $params array
 		unset($params['access_token']);			
 
-		$param = isset($params) ? '&'.http_build_query($params) : null;
+		$param = '&'.http_build_query($params);
 
 		$endpoint = self::API_VERSION.$path.$authentication_method.(('GET' === $method) ? $param : null);
 
