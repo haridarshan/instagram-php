@@ -1,0 +1,7 @@
+# WARNING: Running the tests will perform live actions as the Instagram account.
+# Set all values, move to `env`, run `source tests/env` and `phpunit` to start testing.
+
+# To run the tests you must register Instagram application at https://www.instagram.com/developer/.
+export TEST_CLIENT_ID=
+export TEST_CLIENT_SECRET=
+export TEST_CALLBACK_URL=

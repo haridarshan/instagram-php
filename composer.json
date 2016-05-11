@@ -17,6 +17,11 @@
         "guzzlehttp/psr7": "1.2.*",
 		"ext-curl": "*"
     },
+	"require-dev": {
+        "phpunit/phpunit": "5.3.*",
+        "squizlabs/php_codesniffer": "2.5.*",
+        "phpmd/phpmd": "2.4.*"
+    },
     "autoload": {
         "psr-4": {
             "Haridarshan\\Instagram\\": "src/"
