@@ -286,6 +286,10 @@ class Instagram {
 			throw new InstagramException("You have reached Instagram API Rate Limit");
 		} else {
 			
+			if (!isset($param['access_token'])) {
+				throw new InstagramException("Missing Access Token");
+			}
+			
 			$data = ($params != null) ? $params : array();			
 			
 			// If api call doesn't requires authentication
@@ -299,8 +303,6 @@ class Instagram {
 				$authentication_method = '?access_token='.$this->access_token;
 				// Need to remove the access_token from $params array
 				unset($params['access_token']);				
-			} else {
-				$authentication_method = '?client_id='.$this->getClientId();
 			}
 						
 			$param = (isset($params) && is_array($params)) ? '&'.http_build_query($params) : null;
