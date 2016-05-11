@@ -1,10 +1,11 @@
 <?php
 namespace Haridarshan\Instagram;
 
-use Haridarshan\Instagram\InstagramException;
+
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7;
+use Haridarshan\Instagram\InstagramException;
 
 /**
 * Instagram API class
