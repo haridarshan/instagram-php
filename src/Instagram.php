@@ -147,7 +147,7 @@ class Instagram {
 
 		$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code';
 
-		$query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '' ;
+		$query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '';
 				
 		return sprintf('%s%s?%s', self::API_HOST, $path, $query);
 		
@@ -206,7 +206,7 @@ class Instagram {
 				
 				break;
 			case 'POST': 			
-				$body = is_array($options) ? http_build_query($options) : ltrim($options, '&') ;
+				$body = is_array($options) ? http_build_query($options) : ltrim($options, '&');
 				
 				try {
 					$this->response = json_decode($this->client->request(
@@ -251,7 +251,7 @@ class Instagram {
 		$signature = $endpoint;
 		ksort($params);
 		
-		foreach($params as $key => $value) {
+		foreach ($params as $key => $value) {
 			$signature .= "|$key=$value";	
 		}
 					
@@ -408,7 +408,7 @@ class Instagram {
 	* @return string
 	*/
     public function getAccessToken() {
-        return isset($this->access_token) ? $this->access_token : null ;
+        return isset($this->access_token) ? $this->access_token : null;
     }
 		
 	/*
