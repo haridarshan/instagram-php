@@ -11,7 +11,7 @@ namespace Haridarshan\Instagram;
 * @since May 09, 2016
 * @copyright Haridarshan Gorana
 * @version 1.0
-* @license: GNU GPL v3 License
+* @license: MIT
 */
 class Instagram {
 	/*
