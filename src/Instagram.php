@@ -110,7 +110,6 @@ class Instagram {
 	* Default Constructor 
 	* @param: array|object|string
 	* I/p: Instagram Configuration Data
-	* @return void
 	*/
 	public function __construct($config) {		
 		if (is_object($config)) {
@@ -286,10 +285,8 @@ class Instagram {
 		if ($this->x_rate_limit_remaining < 1) {
 			throw new InstagramException("You have reached Instagram API Rate Limit");
 		} else {
-			$data = array();
-			if ($params != null) {
-				$data = $params;	
-			}
+			
+			$data = ($params != null) ? $params : array();			
 			
 			// If api call doesn't requires authentication
 			if (isset($params['access_token']) && !isset($this->access_token)) {
@@ -305,13 +302,8 @@ class Instagram {
 			} else {
 				$authentication_method = '?client_id='.$this->getClientId();
 			}
-			
-			// This portion needs modification
-			$param = null;
-				
-			if (isset($params) && is_array($params)) {
-				$param = '&'.http_build_query($params);	
-			}
+						
+			$param = (isset($params) && is_array($params)) ? '&'.http_build_query($params) : null;
 			
 			$endpoint = self::API_VERSION.$path.$authentication_method.(('GET' === $method) ? $param : null);
 			
