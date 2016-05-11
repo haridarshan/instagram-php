@@ -181,7 +181,7 @@ class Instagram {
 		$this->execute($path, $options, 'POST');
 		
 		if (isset($this->response->code)) {
-			throw new InstagramException("return status code: ".$this->response->code." type: ".$this->response->error_type." message: ".$this->response->error_message );
+			throw new InstagramException("return status code: ".$this->response->code." type: ".$this->response->error_type." message: ".$this->response->error_message);
 		}
 				
 		$this->setAccessToken($this->response);
