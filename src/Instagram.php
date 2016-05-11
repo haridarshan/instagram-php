@@ -5,7 +5,6 @@ use Haridarshan\Instagram\InstagramException;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7;
-use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Exception\ClientException;
 
 /**
@@ -20,7 +19,7 @@ use GuzzleHttp\Exception\ClientException;
 * @version 1.0
 * @license: GNU GPL v3 License
 */
-class Instagram{
+class Instagram {
 	/*
 	* Library Version
 	*/
@@ -113,7 +112,7 @@ class Instagram{
 	* I/p: Instagram Configuration Data
 	* @return: void
 	*/
-	public function __construct($config){		
+	public function __construct($config) {		
 		if (is_object($config)) {
 			$this->setClientId($config->ClientId);
 			$this->setClientSecret($config->ClientSecret);
@@ -138,7 +137,7 @@ class Instagram{
 	*
 	* @return string
 	*/
-	public function getUrl($path, array $parameters){		
+	public function getUrl($path, array $parameters) {		
 		if (is_array($parameters)) {			
 			if (isset($parameters['scope']) and count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
 				$this->scopes = $parameters['scope']; 
@@ -166,7 +165,7 @@ class Instagram{
 	* @param string $code - Oauth2 Code returned with callback url after successfull login
 	* @param boolean $token - true will return only access token
 	*/
-	public function getToken($path, $code, $token = false){
+	public function getToken($path, $code, $token = false) {
 		$options = array(
 			"grant_type" => "authorization_code",
 			"client_id" => $this->getClientId(),
@@ -200,9 +199,9 @@ class Instagram{
 	* @param array|string $options in case of POST [optional]
 	* @param string $method GET|POST
 	*/
-	protected function execute($endpoint, $options, $method = 'GET'){
+	protected function execute($endpoint, $options, $method = 'GET') {
 		
-		if( !isset($this->client) ){
+		if (!isset($this->client)) {
 			$this->client = new Client([
 				'base_uri' => self::API_HOST
 			]);
@@ -261,7 +260,7 @@ class Instagram{
 	*
 	* return string (Signature)
 	*/
-	protected function secureRequest($endpoint, $auth, $params){	
+	protected function secureRequest($endpoint, $auth, $params) {	
 		if (!is_array($params)) {
 			$params = array();	
 		}
@@ -274,7 +273,7 @@ class Instagram{
 		$signature = $endpoint;
 		ksort($params);
 		
-		foreach($params as $key => $value){
+		foreach($params as $key => $value) {
 			$signature .= "|$key=$value";	
 		}
 					
@@ -286,13 +285,13 @@ class Instagram{
 	*
 	* return mixed
 	*/
-	public function request($path, $params = null, $method = 'GET'){
+	public function request($path, $params = null, $method = 'GET') {
 		if ($this->x_rate_limit_remaining < 1) {
 			throw new InstagramException("You have reached Instagram API Rate Limit");
 			exit();
 		} else {
 			$data = array();
-			if ($params != null){
+			if ($params != null) {
 				$data = $params;	
 			}
 			
@@ -313,7 +312,7 @@ class Instagram{
 				
 				$param = null;
 				
-				if (isset($params) and is_array($params) ) {
+				if (isset($params) and is_array($params)) {
 					$param = '&' . http_build_query($params);	
 				}
 			}
@@ -321,7 +320,7 @@ class Instagram{
 			// This portion needs modification
 			$param = null;
 				
-			if (isset($params) and is_array($params) ) {
+			if (isset($params) and is_array($params)) {
 				$param = '&' . http_build_query($params);	
 			}
 			
@@ -342,7 +341,7 @@ class Instagram{
 	* @param: string $clientId
 	* @return: void
 	*/
-	public function setClientId($clientId){
+	public function setClientId($clientId) {
 		$this->client_id = $clientId;	
 	}
 	
@@ -350,7 +349,7 @@ class Instagram{
 	* Getter: Client Id
 	* @return: string
 	*/
-	public function getClientId(){
+	public function getClientId() {
 		return $this->client_id;	
 	}
 	
@@ -359,7 +358,7 @@ class Instagram{
 	* @param: string $secret
 	* @return: void
 	*/
-	public function setClientSecret($secret){
+	public function setClientSecret($secret) {
 		$this->client_secret = $secret;	
 	}
 	
@@ -367,7 +366,7 @@ class Instagram{
 	* Getter: Client Id
 	* @return: string
 	*/
-	public function getClientSecret(){
+	public function getClientSecret() {
 		return $this->client_secret;	
 	}
 	
@@ -376,7 +375,7 @@ class Instagram{
 	* @param: string $url
 	* @return: void
 	*/
-	public function setCallbackUrl($url){
+	public function setCallbackUrl($url) {
 		$this->callback_url = $url;	
 	}
 	
@@ -384,7 +383,7 @@ class Instagram{
 	* Getter: Callback Url
 	* @return: string
 	*/
-	public function getCallbackUrl(){
+	public function getCallbackUrl() {
 		return $this->callback_url;	
 	}
 	
@@ -393,7 +392,7 @@ class Instagram{
 	* @param: integer|decimal|long $time
 	* @return: void
 	*/
-	public function setTimeout($time = 90){
+	public function setTimeout($time = 90) {
 		$this->timeout = $time;	
 	}
 	
@@ -401,7 +400,7 @@ class Instagram{
 	* Getter: Get Curl Timeout
 	* @return: integer|decimal|long
 	*/
-	public function getTimeout(){
+	public function getTimeout() {
 		return $this->timeout;	
 	}
 	
@@ -410,7 +409,7 @@ class Instagram{
 	* @param: integer|decimal|long $time
 	* @return: void
 	*/
-	public function setConnectTimeout($time = 20){
+	public function setConnectTimeout($time = 20) {
 		$this->connect_timeout = $time;	
 	}
 	
@@ -418,7 +417,7 @@ class Instagram{
 	* Getter: Get Curl connect timeout
 	* @return: integer|decimal|long
 	*/
-	public function getConnectTimeout(){
+	public function getConnectTimeout() {
 		return $this->connect_timeout;	
 	}
 	
@@ -427,7 +426,7 @@ class Instagram{
 	* @param: boolean $secure
 	* @return: void
 	*/
-	public function setRequestSecure($secure){
+	public function setRequestSecure($secure) {
 		$this->secure = $secure;	
 	}	
 	
@@ -438,7 +437,7 @@ class Instagram{
 	*
 	* @return void
 	*/
-    private function setAccessToken($data){		
+    private function setAccessToken($data) {		
         $token = is_object($data) ? $data->access_token : $data;
         $this->access_token = $token;
     }
@@ -448,7 +447,7 @@ class Instagram{
 	*
 	* @return string
 	*/
-    private function getAccessToken(){
+    private function getAccessToken() {
         return $this->access_token;
     }
 		
@@ -457,7 +456,7 @@ class Instagram{
 	*
 	* @return string
 	*/
-	public function getLibraryVersion(){
+	public function getLibraryVersion() {
 		return self::VERSION;
 	}
 }
