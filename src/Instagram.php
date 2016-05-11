@@ -119,6 +119,10 @@ class Instagram {
 		} else {
 			throw new \Haridarshan\Instagram\InstagramException('Invalid Instagram Configuration data');			
 		}
+		
+		$this->client = new \GuzzleHttp\Client([
+			'base_uri' => self::API_HOST
+		]);
 	}
 	
 	/**
@@ -165,12 +169,7 @@ class Instagram {
 			"redirect_uri" => $this->getCallbackUrl(),
 			"code" => $code
 		);
-				
-		$this->client = new \GuzzleHttp\Client([
-			'base_uri' => self::API_HOST
-		]);
-		
-		
+			
 		$this->execute($path, $options, 'POST');
 		
 		if (isset($this->response->code)) {
@@ -189,13 +188,7 @@ class Instagram {
 	* @param array|string $options in case of POST [optional]
 	* @param string $method GET|POST
 	*/
-	protected function execute($endpoint, $options, $method = 'GET') {
-		
-		if (!isset($this->client)) {
-			$this->client = new \GuzzleHttp\Client([
-				'base_uri' => self::API_HOST
-			]);
-		}	
+	protected function execute($endpoint, $options, $method = 'GET') {		
 		switch ($method) {
 			case 'GET':
 				$result = $this->client->request(
