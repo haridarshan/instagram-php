@@ -108,8 +108,8 @@ class Instagram {
 		
 	/*
 	* Default Constructor 
-	* @param: array|object|string
-	* I/p: Instagram Configuration Data
+	* Instagram Configuration Data
+	* @param array|object|string $config
 	*/
 	public function __construct($config) {		
 		if (is_object($config)) {
@@ -319,7 +319,7 @@ class Instagram {
 	
 	/*
 	* Setter: Client Id
-	* @param: string $clientId
+	* @param string $clientId
 	* @return void
 	*/
 	public function setClientId($clientId) {
@@ -336,7 +336,7 @@ class Instagram {
 	
 	/*
 	* Setter: Client Secret
-	* @param: string $secret
+	* @param string $secret
 	* @return void
 	*/
 	public function setClientSecret($secret) {
@@ -353,7 +353,7 @@ class Instagram {
 	
 	/*
 	* Setter: Callback Url
-	* @param: string $url
+	* @param string $url
 	* @return void
 	*/
 	public function setCallbackUrl($url) {
@@ -370,7 +370,7 @@ class Instagram {
 	
 	/*
 	* Setter: Set Curl Timeout
-	* @param: integer|decimal|long $time
+	* @param integer|decimal|long $time
 	* @return void
 	*/
 	public function setTimeout($time = 90) {
@@ -387,7 +387,7 @@ class Instagram {
 	
 	/*
 	* Setter: Set Curl Timeout
-	* @param: integer|decimal|long $time
+	* @param integer|decimal|long $time
 	* @return void
 	*/
 	public function setConnectTimeout($time = 20) {
@@ -404,7 +404,7 @@ class Instagram {
 	
 	/*
 	* Setter: Enfore Signed Request
-	* @param: boolean $secure
+	* @param boolean $secure
 	* @return void
 	*/
 	public function setRequestSecure($secure) {
