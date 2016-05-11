@@ -1,10 +1,6 @@
 <?php
 namespace Haridarshan\Instagram;
 
-
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7;
 use Haridarshan\Instagram\InstagramException;
 
 /**
@@ -123,7 +119,7 @@ class Instagram {
 		} elseif (is_string($config)) {
 			$this->setClientId($config);
 		} else {
-			throw new InstagramException('Invalid Instagram Configuration data');			
+			throw new \Haridarshan\Instagram\InstagramException('Invalid Instagram Configuration data');			
 		}
 	}
 	
@@ -140,7 +136,7 @@ class Instagram {
 			if (isset($parameters['scope']) && count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
 				$this->scopes = $parameters['scope']; 
 			} else {
-				throw new InstagramException("Missing or Invalid Scope permission used");
+				throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
 			}
 			
 			$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code';
@@ -153,7 +149,7 @@ class Instagram {
 			
 			return sprintf('%s%s?%s', self::API_HOST, $path, $query);
 		}
-		throw new InstagramException("Missing or Invalid Scope permission used");
+		throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
 	}
 	
 	/*
@@ -172,7 +168,7 @@ class Instagram {
 			"code" => $code
 		);
 				
-		$this->client = new Client([
+		$this->client = new \GuzzleHttp\Client([
 			'base_uri' => self::API_HOST
 		]);
 		
@@ -180,7 +176,7 @@ class Instagram {
 		$this->execute($path, $options, 'POST');
 		
 		if (isset($this->response->code)) {
-			throw new InstagramException("return status code: ".$this->response->code." type: ".$this->response->error_type." message: ".$this->response->error_message);
+			throw new \Haridarshan\Instagram\InstagramException("return status code: ".$this->response->code." type: ".$this->response->error_type." message: ".$this->response->error_message);
 		}
 				
 		$this->setAccessToken($this->response);
@@ -198,7 +194,7 @@ class Instagram {
 	protected function execute($endpoint, $options, $method = 'GET') {
 		
 		if (!isset($this->client)) {
-			$this->client = new Client([
+			$this->client = new \GuzzleHttp\Client([
 				'base_uri' => self::API_HOST
 			]);
 		}	
@@ -237,8 +233,8 @@ class Instagram {
 							'body' => $body
 						]
 					)->getBody()->getContents());
-				} catch (ClientException $e) {
-					throw new InstagramException($e->getMessage());
+				} catch (\GuzzleHttp\Exception\ClientException $e) {
+					throw new \Haridarshan\Instagram\InstagramException($e->getMessage());
 				}
 				break;
 			case 'DELETE':
@@ -283,10 +279,10 @@ class Instagram {
 	*/
 	public function request($path, $params = null, $method = 'GET') {
 		if ($this->x_rate_limit_remaining < 1) {
-			throw new InstagramException("You have reached Instagram API Rate Limit");
+			throw new \Haridarshan\Instagram\InstagramException("You have reached Instagram API Rate Limit");
 		} else {			
 			if (!isset($params['access_token'])) {
-				throw new InstagramException("$path - api requires an authenticated users access token.");
+				throw new \Haridarshan\Instagram\InstagramException("$path - api requires an authenticated users access token.");
 			}
 			
 			$data = ($params != null) ? $params : array();			
