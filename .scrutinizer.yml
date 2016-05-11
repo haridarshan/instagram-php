@@ -27,7 +27,7 @@ checks:
 tools:
     external_code_coverage: false
     php_analyzer: true
-    php_code_coverage: false
+    php_code_coverage: true
     php_code_sniffer: true
     php_loc: true
     php_cpd: true
