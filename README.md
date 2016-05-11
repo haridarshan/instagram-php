@@ -1,6 +1,8 @@
 # Instagram-php
 Easy-to-use PHP Library for Instagram APIs (Beta)
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/haridarshan/instagram-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/haridarshan/instagram-php/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/haridarshan/instagram-php/badges/build.png?b=master)](https://scrutinizer-ci.com/g/haridarshan/instagram-php/build-status/master)
+
 Installation/Usage
 ------------------
 Composer Installation
