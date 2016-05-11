@@ -7,7 +7,13 @@ class InstagramTest extends \PHPUnit_Framework_TestCase {
 	protected $instagram;
 	
 	protected function setup() {
-		$this->instagram = new Instagram(CLIENT_ID, CLIENT_SECRET, CALLBACK_URL);	
+		$config = array(
+			'ClientId' => CLIENT_ID,
+			'ClientSecret' => CLIENT_SECRET,
+			'Callback' => CLIENT_SECRET
+		);
+		
+		$this->instagram = new Instagram($config);
 	}
 	
 	public function testBuildClient(){
@@ -16,5 +22,13 @@ class InstagramTest extends \PHPUnit_Framework_TestCase {
 		$this->assertObjectHasAttribute('callback_url', $this->instagram);
 	}
 	
-	
+	public function testUrl(){
+		$scope = array(
+			"basic"
+		);
+		
+		$url = $this->instagram->getUrl("oauth/authorize",["scope" => $scope]);
+		
+		$this->assertEquals('https://api.instagram.com/oauth/authorize?client_id='.CLIENT_ID.'&redirect_uri='.urlencode(CALLBACK_URL).'&response_type=code&scope=basic', $url);
+	}
 }

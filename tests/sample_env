@@ -5,3 +5,4 @@
 export TEST_CLIENT_ID=
 export TEST_CLIENT_SECRET=
 export TEST_CALLBACK_URL=
+export TEST_CODE=
