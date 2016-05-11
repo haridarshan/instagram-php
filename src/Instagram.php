@@ -110,7 +110,7 @@ class Instagram {
 	* Default Constructor 
 	* @param: array|object|string
 	* I/p: Instagram Configuration Data
-	* @return: void
+	* @return void
 	*/
 	public function __construct($config) {		
 		if (is_object($config)) {
@@ -144,7 +144,7 @@ class Instagram {
 				throw new InstagramException("Missing or Invalid Scope permission used");
 			}
 			
-			$query = 'client_id='. $this->getClientId() .'&redirect_uri='. urlencode($this->getCallbackUrl()) .'&response_type=code';
+			$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code';
 			
 			if (isset($this->scopes)) {
 				$scope = urlencode(str_replace(",", " ", implode(",", $parameters['scope'])));
@@ -181,7 +181,7 @@ class Instagram {
 		$this->execute($path, $options, 'POST');
 		
 		if (isset($this->response->code)) {
-			throw new InstagramException("return status code: ". $this->response->code ." type: ". $this->response->error_type ." message: ". $this->response->error_message );
+			throw new InstagramException("return status code: ".$this->response->code." type: ".$this->response->error_type." message: ".$this->response->error_message );
 		}
 				
 		$this->setAccessToken($this->response);
@@ -299,24 +299,24 @@ class Instagram {
 					throw new InstagramException("$path - api requires an authenticated users access token.");
 				}
 				
-				$authentication_method = '?access_token=' . $this->access_token;
+				$authentication_method = '?access_token='.$this->access_token;
 				// Need to remove the access_token from $params array
 				unset($params['access_token']);				
 			} else {
-				$authentication_method = '?client_id=' . $this->getClientId();
+				$authentication_method = '?client_id='.$this->getClientId();
 			}
 			
 			// This portion needs modification
 			$param = null;
 				
 			if (isset($params) && is_array($params)) {
-				$param = '&' . http_build_query($params);	
+				$param = '&'.http_build_query($params);	
 			}
 			
-			$endpoint = self::API_VERSION. $path . $authentication_method . (('GET' === $method) ? $param : null);
+			$endpoint = self::API_VERSION.$path.$authentication_method.(('GET' === $method) ? $param : null);
 			
 			if ($this->secure) {
-				$endpoint .= (strstr($endpoint, '?') ? '&' : '?') . 'sig=' . $this->secureRequest($path, $authentication_method, $data);
+				$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $authentication_method, $data);
 			}
 						
 			$this->execute($endpoint, $data);
@@ -328,7 +328,7 @@ class Instagram {
 	/*
 	* Setter: Client Id
 	* @param: string $clientId
-	* @return: void
+	* @return void
 	*/
 	public function setClientId($clientId) {
 		$this->client_id = $clientId;	
@@ -336,7 +336,7 @@ class Instagram {
 	
 	/*
 	* Getter: Client Id
-	* @return: string
+	* @return string
 	*/
 	public function getClientId() {
 		return $this->client_id;	
@@ -345,7 +345,7 @@ class Instagram {
 	/*
 	* Setter: Client Secret
 	* @param: string $secret
-	* @return: void
+	* @return void
 	*/
 	public function setClientSecret($secret) {
 		$this->client_secret = $secret;	
@@ -353,7 +353,7 @@ class Instagram {
 	
 	/*
 	* Getter: Client Id
-	* @return: string
+	* @return string
 	*/
 	public function getClientSecret() {
 		return $this->client_secret;	
@@ -362,7 +362,7 @@ class Instagram {
 	/*
 	* Setter: Callback Url
 	* @param: string $url
-	* @return: void
+	* @return void
 	*/
 	public function setCallbackUrl($url) {
 		$this->callback_url = $url;	
@@ -370,7 +370,7 @@ class Instagram {
 	
 	/*
 	* Getter: Callback Url
-	* @return: string
+	* @return string
 	*/
 	public function getCallbackUrl() {
 		return $this->callback_url;	
@@ -379,7 +379,7 @@ class Instagram {
 	/*
 	* Setter: Set Curl Timeout
 	* @param: integer|decimal|long $time
-	* @return: void
+	* @return void
 	*/
 	public function setTimeout($time = 90) {
 		$this->timeout = $time;	
@@ -387,7 +387,7 @@ class Instagram {
 	
 	/*
 	* Getter: Get Curl Timeout
-	* @return: integer|decimal|long
+	* @return integer|decimal|long
 	*/
 	public function getTimeout() {
 		return $this->timeout;	
@@ -396,7 +396,7 @@ class Instagram {
 	/*
 	* Setter: Set Curl Timeout
 	* @param: integer|decimal|long $time
-	* @return: void
+	* @return void
 	*/
 	public function setConnectTimeout($time = 20) {
 		$this->connect_timeout = $time;	
@@ -404,7 +404,7 @@ class Instagram {
 	
 	/*
 	* Getter: Get Curl connect timeout
-	* @return: integer|decimal|long
+	* @return integer|decimal|long
 	*/
 	public function getConnectTimeout() {
 		return $this->connect_timeout;	
@@ -413,7 +413,7 @@ class Instagram {
 	/*
 	* Setter: Enfore Signed Request
 	* @param: boolean $secure
-	* @return: void
+	* @return void
 	*/
 	public function setRequestSecure($secure) {
 		$this->secure = $secure;	
@@ -426,10 +426,10 @@ class Instagram {
 	*
 	* @return void
 	*/
-    private function setAccessToken($data) {		
-        $token = is_object($data) ? $data->access_token : $data;
-        $this->access_token = $token;
-    }
+	private function setAccessToken($data) {		
+		$token = is_object($data) ? $data->access_token : $data;
+		$this->access_token = $token;
+	}
 	
 	/*
 	* Getter: User Access Token

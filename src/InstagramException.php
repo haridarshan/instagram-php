@@ -1,6 +1,6 @@
 <?php
 namespace Haridarshan\Instagram;
 
-class InstagramException extends \Exception{
+class InstagramException extends \Exception {
 	
 }
