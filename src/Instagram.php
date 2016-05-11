@@ -133,25 +133,32 @@ class Instagram {
 	*
 	* @return string
 	*/
-	public function getUrl($path, array $parameters) {		
-		if (is_array($parameters)) {			
-			if (isset($parameters['scope']) && count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
-				$this->scopes = $parameters['scope']; 
-			} else {
-				throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
-			}
-			
-			$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code';
-			
-			if (isset($this->scopes)) {
-				$scope = urlencode(str_replace(",", " ", implode(",", $parameters['scope'])));
-
-				$query .= "&scope=$scope";
-			}
-			
-			return sprintf('%s%s?%s', self::API_HOST, $path, $query);
+	public function getUrl($path, array $parameters) {	
+		
+		if (!is_array($parameters)) {
+			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
 		}
-		throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
+				
+		if (isset($parameters['scope']) && count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
+			$this->scopes = $parameters['scope']; 
+		} else {
+			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
+		}
+
+		$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code';
+
+		$query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '' ;
+		
+		/*
+		if (isset($this->scopes)) {
+			$scope = urlencode(str_replace(",", " ", implode(",", $parameters['scope'])));
+
+			$query .= "&scope=$scope";
+		}
+		*/
+		
+		return sprintf('%s%s?%s', self::API_HOST, $path, $query);
+		
 	}
 	
 	/*
