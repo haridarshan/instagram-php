@@ -18,7 +18,7 @@ composer require haridarshan/instagram-php
 ```
 require 'vendor/autoload.php';
 
-use Jet\Instagram\Instagram;
+use Haridarshan\Instagram\Instagram;
 ```
 
 ### Authorization Code Flow
