@@ -54,9 +54,5 @@ $insta_access_token = $instagram->getToken('oauth/access_token', $_GET['code'], 
 ```
 // To get User Profile Details or to make any api call to instagram
 $user = $instagram->request("users/self", [ "access_token" => $insta_access_token ]);
-
-or 
-
-$user = $instagram->request("users/{user-id}");
 ```
 
