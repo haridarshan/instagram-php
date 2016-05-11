@@ -142,7 +142,7 @@ class Instagram{
 		if (is_array($parameters)) {			
 			if (isset($parameters['scope']) and count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
 				$this->scopes = $parameters['scope']; 
-			}else{
+			} else{
 				throw new InstagramException("Missing or Invalid Scope permission used");
 			}
 			
