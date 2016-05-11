@@ -124,8 +124,7 @@ class Instagram {
 		} elseif (is_string($config)) {
 			$this->setClientId($config);
 		} else {
-			throw new InstagramException('Invalid Instagram Configuration data');
-			exit();
+			throw new InstagramException('Invalid Instagram Configuration data');			
 		}
 	}
 	
@@ -139,7 +138,7 @@ class Instagram {
 	*/
 	public function getUrl($path, array $parameters) {		
 		if (is_array($parameters)) {			
-			if (isset($parameters['scope']) and count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
+			if (isset($parameters['scope']) && count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
 				$this->scopes = $parameters['scope']; 
 			} else {
 				throw new InstagramException("Missing or Invalid Scope permission used");
@@ -173,9 +172,7 @@ class Instagram {
 			"redirect_uri" => $this->getCallbackUrl(),
 			"code" => $code
 		);
-		
-		$apihost = self::API_HOST.'/'.$path;
-		
+				
 		$this->client = new Client([
 			'base_uri' => self::API_HOST
 		]);
@@ -255,8 +252,8 @@ class Instagram {
 	* copy from Instagram API Documentation: https://www.instagram.com/developer/secure-api-requests/
 	* 
 	* @param string $endpoint
-	* @param string $params
-	* @param string $secret
+	* @param string $auth
+	* @param array|string $params
 	*
 	* return string (Signature)
 	*/
@@ -288,7 +285,6 @@ class Instagram {
 	public function request($path, $params = null, $method = 'GET') {
 		if ($this->x_rate_limit_remaining < 1) {
 			throw new InstagramException("You have reached Instagram API Rate Limit");
-			exit();
 		} else {
 			$data = array();
 			if ($params != null) {
@@ -296,12 +292,11 @@ class Instagram {
 			}
 			
 			// If api call doesn't requires authentication
-			if (isset($params['access_token']) and !isset($this->access_token)) {
+			if (isset($params['access_token']) && !isset($this->access_token)) {
 				$this->setAccessToken($params['access_token']);	
 				
 				if (!isset($this->access_token)) {
 					throw new InstagramException("$path - api requires an authenticated users access token.");
-					exit();
 				}
 				
 				$authentication_method = '?access_token=' . $this->access_token;
@@ -309,18 +304,12 @@ class Instagram {
 				unset($params['access_token']);				
 			} else {
 				$authentication_method = '?client_id=' . $this->getClientId();
-				
-				$param = null;
-				
-				if (isset($params) and is_array($params)) {
-					$param = '&' . http_build_query($params);	
-				}
 			}
 			
 			// This portion needs modification
 			$param = null;
 				
-			if (isset($params) and is_array($params)) {
+			if (isset($params) && is_array($params)) {
 				$param = '&' . http_build_query($params);	
 			}
 			
@@ -447,7 +436,7 @@ class Instagram {
 	*
 	* @return string
 	*/
-    private function getAccessToken() {
+    public function getAccessToken() {
         return $this->access_token;
     }
 		
