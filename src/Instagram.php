@@ -148,15 +148,7 @@ class Instagram {
 		$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code';
 
 		$query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '' ;
-		
-		/*
-		if (isset($this->scopes)) {
-			$scope = urlencode(str_replace(",", " ", implode(",", $parameters['scope'])));
-
-			$query .= "&scope=$scope";
-		}
-		*/
-		
+				
 		return sprintf('%s%s?%s', self::API_HOST, $path, $query);
 		
 	}
