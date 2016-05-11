@@ -271,7 +271,7 @@ class Instagram {
 			throw new \Haridarshan\Instagram\InstagramException("$path - api requires an authenticated users access token.");
 		}
 
-		$data = ($params != null) ? $params : array();			
+		$data = ($params !== null) ? $params : array();			
 
 		// If api call doesn't requires authentication
 		if (isset($params['access_token']) && !isset($this->access_token)) {
