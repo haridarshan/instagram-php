@@ -271,18 +271,15 @@ class Instagram {
 			throw new \Haridarshan\Instagram\InstagramException("$path - api requires an authenticated users access token.");
 		}
 
-		$data = ($params !== null) ? $params : array();			
-
-		// If api call doesn't requires authentication
-		if (isset($params['access_token']) && !isset($this->access_token)) {
-			$this->setAccessToken($params['access_token']);								
-		}
+		$data = ($params !== null) ? $params : array();	
+		
+		$this->setAccessToken($params['access_token']);	
 
 		$authentication_method = '?access_token='.$this->access_token;
 		// Need to remove the access_token from $params array
 		unset($params['access_token']);			
 
-		$param = (isset($params) && is_array($params)) ? '&'.http_build_query($params) : null;
+		$param = isset($params) ? '&'.http_build_query($params) : null;
 
 		$endpoint = self::API_VERSION.$path.$authentication_method.(('GET' === $method) ? $param : null);
 
