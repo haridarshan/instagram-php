@@ -3,46 +3,60 @@ Easy-to-use PHP Library for Instagram APIs (Beta)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/haridarshan/instagram-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/haridarshan/instagram-php/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/haridarshan/instagram-php/badges/build.png?b=master)](https://scrutinizer-ci.com/g/haridarshan/instagram-php/build-status/master) [![Latest Stable Version](https://img.shields.io/packagist/v/haridarshan/instagram-php.svg)](https://packagist.org/packages/haridarshan/instagram-php) [![License](https://img.shields.io/packagist/l/haridarshan/instagram-php.svg?style=flat)](https://packagist.org/packages/haridarshan/instagram-php) [![Total Downloads](http://img.shields.io/packagist/dm/haridarshan/instagram-php.svg?style=flat)](https://packagist.org/packages/haridarshan/instagram-php) [![Issues Count](https://img.shields.io/github/issues/haridarshan/instagram-php.svg)](https://github.com/haridarshan/instagram-php/issues)
 
-Installation/Usage
-------------------
-Composer Installation
+##Installation
+
+To install, use composer:
+
 ```
 composer require haridarshan/instagram-php
 ```
 
-OR
-
-Download the Instagram-php Library
-Add autoload.php in your PHP script
+## Usage
 
 ```
 require 'vendor/autoload.php';
 
 use Jet\Instagram\Instagram;
+```
 
+### Authorization Code Flow
+
+```
 $instagram = new Instagram(array(
   "ClientId" => <InstagramAppClientId>,
   "ClientSecret" => <InstagramAppClientSecret>,
-	"Callback" => <callback_url>
+  "Callback" => <callback_url>
 ));
 
 $scope = [
-	"basic",
-	"likes",
-	"public_content",
-	"follower_list", 
-	"comments", 
-	"relationships"
+  "basic",
+  "likes",
+  "public_content",
+  "follower_list", 
+  "comments", 
+  "relationships"
 ];
+
 // To get the Instagram Login Url
 $insta_url = $instagram->getUrl("oauth/authorize",["scope" => $scope]);
 echo "<a href='{$insta_url}'>Login with Instagram</a>";
+```
 
+### Get User's Access Token
+
+```
 // To get User's Access Token
 $insta_access_token = $instagram->getToken('oauth/access_token', $_GET['code'], true);
+```
 
+### Request to Instagram APIs
+
+```
 // To get User Profile Details or to make any api call to instagram
 $user = $instagram->request("users/self", [ "access_token" => $insta_access_token ]);
 
+or 
+
+$user = $instagram->request("users/{user-id}");
 ```
 
