@@ -9,110 +9,110 @@ use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Exception\ClientException;
 
 /**
- * Instagram API class
- *
- * API Documentation: http://instagram.com/developer/
- * Class Documentation: https://github.com/haridarshan/Instagram-php
- *
- * @author Haridarshan Gorana
- * @since May 09, 2016
- * @copyright Haridarshan Gorana
- * @version 1.0
- * @license: GNU GPL v3 License
- */
+* Instagram API class
+*
+* API Documentation: http://instagram.com/developer/
+* Class Documentation: https://github.com/haridarshan/Instagram-php
+*
+* @author Haridarshan Gorana
+* @since May 09, 2016
+* @copyright Haridarshan Gorana
+* @version 1.0
+* @license: GNU GPL v3 License
+*/
 class Instagram{
 	/*
-	 * Library Version
-	 */
+	* Library Version
+	*/
 	const VERSION = '1.0';
 	
 	/*
-	 * API End Point
-	 */  
+	* API End Point
+	*/  
 	const API_VERSION = 'v1/';
 	
 	/*
-	 * API End Point
-	 */  
+	* API End Point
+	*/  
 	const API_HOST = 'https://api.instagram.com/';
 		
 	/*
-	 * Client Id
-	 * @var: string
-	 */
+	* Client Id
+	* @var: string
+	*/
 	private $client_id;
 	
 	/*
-	 * Client Secret
-	 * @var: string
-	 */
+	* Client Secret
+	* @var: string
+	*/
 	private $client_secret;
 	
 	/*
-	 * Instagram Callback url
-	 * @var: string
-	 */
+	* Instagram Callback url
+	* @var: string
+	*/
 	private $callback_url;
 	
 	/*
-	 * Oauth Access Token
-	 * @var: string
-	 */
+	* Oauth Access Token
+	* @var: string
+	*/
 	private $access_token;
 	
 	/*
-	 * Instagram Available Scopes
-	 * @var: array of strings
-	 */
+	* Instagram Available Scopes
+	* @var: array of strings
+	*/
 	private $default_scopes = array("basic", "public_content", "follower_list", "comments", "relationships", "likes");
 	
 	/*
-	 * User's Scope
-	 * @var: array of strings
-	 */
+	* User's Scope
+	* @var: array of strings
+	*/
 	private $scopes = array();
 	
 	/*
-	 * Enable secure request
-	 * @var: boolean
-	 */ 
+	* Enable secure request
+	* @var: boolean
+	*/ 
 	private $secure = true;
 	
 	/*
-	 * Curl timeout
-	 * @var: integer|decimal|long
-	 */
+	* Curl timeout
+	* @var: integer|decimal|long
+	*/
 	private $timeout = 90;
 	
 	/*
-	 * Curl Connect timeout
-	 * @var: integer|decimal|long
-	 */
+	* Curl Connect timeout
+	* @var: integer|decimal|long
+	*/
 	private $connect_timeout = 20;
 	
 	/*
-	 * Remaining Rate Limit
-	 * Sandbox = 500
-	 * Live = 5000
-	 */
+	* Remaining Rate Limit
+	* Sandbox = 500
+	* Live = 5000
+	*/
 	private $x_rate_limit_remaining = 500;
 	
 	/*
-	 * @var GuzzleHttp\ClientInterface $http
-	 */
+	* @var GuzzleHttp\ClientInterface $http
+	*/
 	private $client;
 	
 	/*
-	 * @var GuzzleHttp\Psr7\Response $response
-	 */
+	* @var GuzzleHttp\Psr7\Response $response
+	*/
 	private $response;
 		
 	/*
-	 * Default Constructor 
-	 * @param: array|object|string
-	 * I/p: Instagram Configuration Data
-	 * @return: void
-	 */
+	* Default Constructor 
+	* @param: array|object|string
+	* I/p: Instagram Configuration Data
+	* @return: void
+	*/
 	public function __construct($config){		
 		if (is_object($config)) {
 			$this->setClientId($config->ClientId);
@@ -130,19 +130,19 @@ class Instagram{
 		}
 	}
 	
-	 /**
-     * Make URLs for user browser navigation.
-     *
-     * @param string $path
-     * @param array  $parameters
-     *
-     * @return string
-     */
+	/**
+	* Make URLs for user browser navigation.
+	*
+	* @param string $path
+	* @param array  $parameters
+	*
+	* @return string
+	*/
 	public function getUrl($path, array $parameters){		
 		if (is_array($parameters)) {			
 			if (isset($parameters['scope']) and count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
 				$this->scopes = $parameters['scope']; 
-			} else{
+			} else {
 				throw new InstagramException("Missing or Invalid Scope permission used");
 			}
 			
@@ -160,12 +160,12 @@ class Instagram{
 	}
 	
 	/*
-	 * Get the Oauth Access Token of a user from callback code
-	 * 
-	 * @param string $path - OAuth Access Token Path
-	 * @param string $code - Oauth2 Code returned with callback url after successfull login
-	 * @param boolean $token - true will return only access token
-	 */
+	* Get the Oauth Access Token of a user from callback code
+	* 
+	* @param string $path - OAuth Access Token Path
+	* @param string $code - Oauth2 Code returned with callback url after successfull login
+	* @param boolean $token - true will return only access token
+	*/
 	public function getToken($path, $code, $token = false){
 		$options = array(
 			"grant_type" => "authorization_code",
@@ -194,12 +194,12 @@ class Instagram{
 	}
 	
 	/*
-	 * Method to make GuzzleHttp Client Request to Instagram APIs
-	 *
-	 * @param string $endpoint
-	 * @param array|string $options in case of POST [optional]
-	 * @param string $method GET|POST
-	 */
+	* Method to make GuzzleHttp Client Request to Instagram APIs
+	*
+	* @param string $endpoint
+	* @param array|string $options in case of POST [optional]
+	* @param string $method GET|POST
+	*/
 	protected function execute($endpoint, $options, $method = 'GET'){
 		
 		if( !isset($this->client) ){
@@ -252,15 +252,15 @@ class Instagram{
 	}
 		
 	/*
-	 * Secure API Request by using endpoint, paramters and API secret
-	 * copy from Instagram API Documentation: https://www.instagram.com/developer/secure-api-requests/
-	 * 
-	 * @param string $endpoint
-	 * @param string $params
-	 * @param string $secret
-	 *
-	 * return string (Signature)
-	 */
+	* Secure API Request by using endpoint, paramters and API secret
+	* copy from Instagram API Documentation: https://www.instagram.com/developer/secure-api-requests/
+	* 
+	* @param string $endpoint
+	* @param string $params
+	* @param string $secret
+	*
+	* return string (Signature)
+	*/
 	protected function secureRequest($endpoint, $auth, $params){	
 		if (!is_array($params)) {
 			$params = array();	
@@ -282,10 +282,10 @@ class Instagram{
 	}
 	
 	/* 
-	 * Method to make api requests
-	 *
-	 * return mixed
-	 */
+	* Method to make api requests
+	*
+	* return mixed
+	*/
 	public function request($path, $params = null, $method = 'GET'){
 		if ($this->x_rate_limit_remaining < 1) {
 			throw new InstagramException("You have reached Instagram API Rate Limit");
@@ -337,147 +337,126 @@ class Instagram{
 		}
 	}
 	
-	
 	/*
-	 * Setter: Client Id
-	 * @param: string $clientId
-	 * @return: void
-	 */
+	* Setter: Client Id
+	* @param: string $clientId
+	* @return: void
+	*/
 	public function setClientId($clientId){
 		$this->client_id = $clientId;	
 	}
 	
 	/*
-	 * Getter: Client Id
-	 * @return: string
-	 */
+	* Getter: Client Id
+	* @return: string
+	*/
 	public function getClientId(){
 		return $this->client_id;	
 	}
 	
 	/*
-	 * Setter: Client Secret
-	 * @param: string $secret
-	 * @return: void
-	 */
+	* Setter: Client Secret
+	* @param: string $secret
+	* @return: void
+	*/
 	public function setClientSecret($secret){
 		$this->client_secret = $secret;	
 	}
 	
 	/*
-	 * Getter: Client Id
-	 * @return: string
-	 */
+	* Getter: Client Id
+	* @return: string
+	*/
 	public function getClientSecret(){
 		return $this->client_secret;	
 	}
 	
 	/*
-	 * Setter: Callback Url
-	 * @param: string $url
-	 * @return: void
-	 */
+	* Setter: Callback Url
+	* @param: string $url
+	* @return: void
+	*/
 	public function setCallbackUrl($url){
 		$this->callback_url = $url;	
 	}
 	
 	/*
-	 * Getter: Callback Url
-	 * @return: string
-	 */
+	* Getter: Callback Url
+	* @return: string
+	*/
 	public function getCallbackUrl(){
 		return $this->callback_url;	
 	}
 	
 	/*
-	 * Setter: Set Curl Timeout
-	 * @param: integer|decimal|long $time
-	 * @return: void
-	 */
+	* Setter: Set Curl Timeout
+	* @param: integer|decimal|long $time
+	* @return: void
+	*/
 	public function setTimeout($time = 90){
 		$this->timeout = $time;	
 	}
 	
 	/*
-	 * Getter: Get Curl Timeout
-	 * @return: integer|decimal|long
-	 */
+	* Getter: Get Curl Timeout
+	* @return: integer|decimal|long
+	*/
 	public function getTimeout(){
 		return $this->timeout;	
 	}
 	
 	/*
-	 * Setter: Set Curl Timeout
-	 * @param: integer|decimal|long $time
-	 * @return: void
-	 */
+	* Setter: Set Curl Timeout
+	* @param: integer|decimal|long $time
+	* @return: void
+	*/
 	public function setConnectTimeout($time = 20){
 		$this->connect_timeout = $time;	
 	}
 	
 	/*
-	 * Getter: Get Curl connect timeout
-	 * @return: integer|decimal|long
-	 */
+	* Getter: Get Curl connect timeout
+	* @return: integer|decimal|long
+	*/
 	public function getConnectTimeout(){
 		return $this->connect_timeout;	
 	}
 	
 	/*
-	 * Setter: Enfore Signed Request
-	 * @param: boolean $secure
-	 * @return: void
-	 */
+	* Setter: Enfore Signed Request
+	* @param: boolean $secure
+	* @return: void
+	*/
 	public function setRequestSecure($secure){
 		$this->secure = $secure;	
 	}	
 	
 	/*
-     * Setter: User Access Token
-     *
-     * @param object|string $data
-     *
-     * @return void
-     */
+	* Setter: User Access Token
+	*
+	* @param object|string $data
+	*
+	* @return void
+	*/
     private function setAccessToken($data){		
         $token = is_object($data) ? $data->access_token : $data;
         $this->access_token = $token;
     }
 	
-    /*
-     * Getter: User Access Token
-     *
-     * @return string
-     */
+	/*
+	* Getter: User Access Token
+	*
+	* @return string
+	*/
     private function getAccessToken(){
         return $this->access_token;
     }
-	
+		
 	/*
-     * Extract response header content
-     *
-     * @param array
-     *
-     * @return array
-     */
-    protected function processHeaders($content){
-        $headers = array();
-        foreach (explode("\r\n", $content) as $i => $line) {
-            if ($i === 0) {
-                $headers['http_code'] = $line;
-                continue;
-            }
-            list($key, $value) = explode(':', $line);
-            $headers[$key] = $value;
-        }
-        return $headers;
-    }
-	
-	/*
-	 * Get a string containing the version of the library.
-	 *
-	 * @return string
-	 */
+	* Get a string containing the version of the library.
+	*
+	* @return string
+	*/
 	public function getLibraryVersion(){
 		return self::VERSION;
 	}
