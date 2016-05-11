@@ -236,7 +236,7 @@ class Instagram {
 	* @param string $auth
 	* @param array|string $params
 	*
-	* return string (Signature)
+	* @return string (Signature)
 	*/
 	protected function secureRequest($endpoint, $auth, $params) {	
 		if (!is_array($params)) {
@@ -260,8 +260,7 @@ class Instagram {
 	
 	/* 
 	* Method to make api requests
-	*
-	* return mixed
+	* @return mixed
 	*/
 	public function request($path, $params = null, $method = 'GET') {
 		if (!$this->x_rate_limit_remaining) {
@@ -392,9 +391,7 @@ class Instagram {
 	
 	/*
 	* Setter: User Access Token
-	*
 	* @param object|string $data
-	*
 	* @return void
 	*/
 	private function setAccessToken($data) {		
@@ -404,7 +401,6 @@ class Instagram {
 	
 	/*
 	* Getter: User Access Token
-	*
 	* @return string
 	*/
     public function getAccessToken() {
@@ -413,7 +409,6 @@ class Instagram {
 		
 	/*
 	* Get a string containing the version of the library.
-	*
 	* @return string
 	*/
 	public function getLibraryVersion() {
