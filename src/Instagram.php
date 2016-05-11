@@ -1,7 +1,7 @@
 <?php
 namespace Haridarshan\Instagram;
 
-/**
+/*
 * Instagram API class
 *
 * API Documentation: http://instagram.com/developer/
@@ -125,7 +125,7 @@ class Instagram {
 		]);
 	}
 	
-	/**
+	/*
 	* Make URLs for user browser navigation.
 	*
 	* @param string $path
