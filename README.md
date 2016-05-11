@@ -3,6 +3,8 @@ Easy-to-use PHP Library for Instagram APIs (Beta)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/haridarshan/instagram-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/haridarshan/instagram-php/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/haridarshan/instagram-php/badges/build.png?b=master)](https://scrutinizer-ci.com/g/haridarshan/instagram-php/build-status/master) [![Latest Stable Version](https://img.shields.io/packagist/v/haridarshan/instagram-php.svg)](https://packagist.org/packages/haridarshan/instagram-php) [![License](https://img.shields.io/packagist/l/haridarshan/instagram-php.svg?style=flat)](https://packagist.org/packages/haridarshan/instagram-php) [![Total Downloads](http://img.shields.io/packagist/dm/haridarshan/instagram-php.svg?style=flat)](https://packagist.org/packages/haridarshan/instagram-php) [![Issues Count](https://img.shields.io/github/issues/haridarshan/instagram-php.svg)](https://github.com/haridarshan/instagram-php/issues)
 
+> **Note:** Any app created before Nov 17, 2015 will continue to function until June 2016. After June 2016, the app will automatically be moved to Sandbox Mode if it wasn't approved through the review process. The Instagram API requires an access_token from authenticated users for each endpoint. We no longer support making requests using just the client_id.
+
 ##Installation
 
 To install, use composer:
