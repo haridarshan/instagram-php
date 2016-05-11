@@ -1,8 +1,6 @@
 <?php
 namespace Haridarshan\Instagram;
 
-use Haridarshan\Instagram\InstagramException;
-
 /**
 * Instagram API class
 *
