@@ -16,7 +16,7 @@ use Haridarshan\Instagram\InstagramException;
 * @author Haridarshan Gorana
 * @since May 09, 2016
 * @copyright Haridarshan Gorana
-* @version 1.0.1
+* @version 1.0
 * @license: GNU GPL v3 License
 */
 class Instagram {
