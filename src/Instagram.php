@@ -213,12 +213,8 @@ class Instagram {
 				$this->response = json_decode($result->getBody()->getContents());
 				
 				break;
-			case 'POST': 
-				if (is_array($options)) {
-					$body = http_build_query($options);
-				} else {
-					$body = ltrim($options, '&');
-				}
+			case 'POST': 			
+				$body = is_array($options) ? http_build_query($options) : ltrim($options, '&') ;
 				
 				try {
 					$this->response = json_decode($this->client->request(
@@ -276,36 +272,36 @@ class Instagram {
 	* return mixed
 	*/
 	public function request($path, $params = null, $method = 'GET') {
-		if ($this->x_rate_limit_remaining < 1) {
+		if (!$this->x_rate_limit_remaining) {
 			throw new \Haridarshan\Instagram\InstagramException("You have reached Instagram API Rate Limit");
-		} else {			
-			if (!isset($params['access_token'])) {
-				throw new \Haridarshan\Instagram\InstagramException("$path - api requires an authenticated users access token.");
-			}
-			
-			$data = ($params != null) ? $params : array();			
-			
-			// If api call doesn't requires authentication
-			if (isset($params['access_token']) && !isset($this->access_token)) {
-				$this->setAccessToken($params['access_token']);								
-			}
-			
-			$authentication_method = '?access_token='.$this->access_token;
-			// Need to remove the access_token from $params array
-			unset($params['access_token']);			
-						
-			$param = (isset($params) && is_array($params)) ? '&'.http_build_query($params) : null;
-			
-			$endpoint = self::API_VERSION.$path.$authentication_method.(('GET' === $method) ? $param : null);
-			
-			if ($this->secure) {
-				$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $authentication_method, $data);
-			}
-						
-			$this->execute($endpoint, $data);
-			
-			return $this->response;		
 		}
+		
+		if (!isset($params['access_token'])) {
+			throw new \Haridarshan\Instagram\InstagramException("$path - api requires an authenticated users access token.");
+		}
+
+		$data = ($params != null) ? $params : array();			
+
+		// If api call doesn't requires authentication
+		if (isset($params['access_token']) && !isset($this->access_token)) {
+			$this->setAccessToken($params['access_token']);								
+		}
+
+		$authentication_method = '?access_token='.$this->access_token;
+		// Need to remove the access_token from $params array
+		unset($params['access_token']);			
+
+		$param = (isset($params) && is_array($params)) ? '&'.http_build_query($params) : null;
+
+		$endpoint = self::API_VERSION.$path.$authentication_method.(('GET' === $method) ? $param : null);
+
+		if ($this->secure) {
+			$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $authentication_method, $data);
+		}
+
+		$this->execute($endpoint, $data);
+
+		return $this->response;		
 	}
 	
 	/*
@@ -420,7 +416,7 @@ class Instagram {
 	* @return string
 	*/
     public function getAccessToken() {
-        return $this->access_token;
+        return isset($this->access_token) ? $this->access_token : null ;
     }
 		
 	/*
