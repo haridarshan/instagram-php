@@ -403,9 +403,9 @@ class Instagram {
 	* Getter: User Access Token
 	* @return string
 	*/
-    public function getAccessToken() {
-        return isset($this->access_token) ? $this->access_token : null;
-    }
+	public function getAccessToken() {
+		return isset($this->access_token) ? $this->access_token : null;
+	}
 		
 	/*
 	* Get a string containing the version of the library.
