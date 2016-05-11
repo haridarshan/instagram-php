@@ -3,7 +3,6 @@ namespace Haridarshan\Instagram;
 
 use Haridarshan\Instagram\InstagramException;
 use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 
