@@ -106,16 +106,10 @@ class Instagram {
 	* @param array|object|string $config
 	*/
 	public function __construct($config) {		
-		if (is_object($config)) {
-			$this->setClientId($config->ClientId);
-			$this->setClientSecret($config->ClientSecret);
-			$this->setCallbackUrl($config->Callback);			
-		} elseif (is_array($config)) {			
+		if (is_array($config)) {			
 			$this->setClientId($config['ClientId']);
 			$this->setClientSecret($config['ClientSecret']);
 			$this->setCallbackUrl($config['Callback']);	
-		} elseif (is_string($config)) {
-			$this->setClientId($config);
 		} else {
 			throw new \Haridarshan\Instagram\InstagramException('Invalid Instagram Configuration data');			
 		}
@@ -187,45 +181,26 @@ class Instagram {
 	* @param array|string $options in case of POST [optional]
 	* @param string $method GET|POST
 	*/
-	protected function execute($endpoint, $options, $method = 'GET') {		
-		switch ($method) {
-			case 'GET':
-				$result = $this->client->request(
-					$method, 
-					$endpoint, 
-					[
-						'headers' => [
-							'Accept'     => 'application/json'
-						]
-					]
-				);
-				$limit = $result->getHeader('x-ratelimit-remaining');
-				$this->x_rate_limit_remaining = $limit[0];
-				
-				$this->response = json_decode($result->getBody()->getContents());
-				
-				break;
-			case 'POST': 			
-				$body = is_array($options) ? http_build_query($options) : ltrim($options, '&');
-				
-				try {
-					$this->response = json_decode($this->client->request(
-						$method, 
-						$endpoint, 
-						[
-							'headers' => [
-								'Accept'     => 'application/json'
-							],
-							'body' => $body
-						]
-					)->getBody()->getContents());
-				} catch (\GuzzleHttp\Exception\ClientException $e) {
-					throw new \Haridarshan\Instagram\InstagramException($e->getMessage());
-				}
-				break;
-			case 'DELETE':
-				break;
+	protected function execute($endpoint, $options, $method = 'GET') {	
+		try {	
+			$result = $result = $this->client->request(
+				$method, 
+				$endpoint, 
+				[
+					'headers' => [
+						'Accept'     => 'application/json'
+					],
+					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
+				]
+			);
+		} catch (\GuzzleHttp\Exception\ClientException $e) {
+			throw new \Haridarshan\Instagram\InstagramException($e->getMessage());
 		}
+		
+		$limit = $result->getHeader('x-ratelimit-remaining');
+		$this->x_rate_limit_remaining = $limit[0];
+
+		$this->response = json_decode($result->getBody()->getContents());
 	}
 		
 	/*
