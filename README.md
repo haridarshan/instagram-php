@@ -44,7 +44,7 @@ $insta_url = $instagram->getUrl("oauth/authorize",["scope" => $scope]);
 echo "<a href='{$insta_url}'>Login with Instagram</a>";
 ```
 
-### Get User's Access Token
+### Get Access Token
 
 ```
 // To get User's Access Token
@@ -56,5 +56,10 @@ $insta_access_token = $instagram->getToken('oauth/access_token', $_GET['code'], 
 ```
 // To get User Profile Details or to make any api call to instagram
 $user = $instagram->request("users/self", [ "access_token" => $insta_access_token ]);
+
+$media_comment = $instagram->request("media/{media-id}/comments", [ "access_token" => $insta_access_token, "text" => "{comment}" ], "POST");
+
+$delete_comment = $instagram->request("media/{media-id}/comments/{comment-id}", [ "access_token" => $insta_access_token], "DELETE");
+
 ```
 
