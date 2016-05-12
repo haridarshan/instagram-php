@@ -175,35 +175,6 @@ class Instagram {
 	}
 	
 	/*
-	* Method to make GuzzleHttp Client Request to Instagram APIs
-	*
-	* @param string $endpoint
-	* @param array|string $options in case of POST [optional]
-	* @param string $method GET|POST
-	*/
-	protected function execute($endpoint, $options, $method = 'GET') {	
-		try {	
-			$result = $result = $this->client->request(
-				$method, 
-				$endpoint, 
-				[
-					'headers' => [
-						'Accept'     => 'application/json'
-					],
-					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
-				]
-			);
-		} catch (\GuzzleHttp\Exception\ClientException $e) {
-			throw new \Haridarshan\Instagram\InstagramException($e->getMessage());
-		}
-		
-		$limit = $result->getHeader('x-ratelimit-remaining');
-		$this->x_rate_limit_remaining = $limit[0];
-
-		$this->response = json_decode($result->getBody()->getContents());
-	}
-		
-	/*
 	* Secure API Request by using endpoint, paramters and API secret
 	* copy from Instagram API Documentation: https://www.instagram.com/developer/secure-api-requests/
 	* 
@@ -247,24 +218,54 @@ class Instagram {
 		}
 		
 		$data = $params;
-		
+				
 		$this->setAccessToken($params['access_token']);	
 		
 		$authentication_method = '?access_token='.$this->access_token;
+				
 		// Need to remove the access_token from $params array
 		unset($params['access_token']);			
 
 		$param = '&'.http_build_query($params);
 
 		$endpoint = self::API_VERSION.$path.$authentication_method.(('GET' === $method) ? $param : null);
-
+		
 		if ($this->secure) {
 			$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $authentication_method, $data);
 		}
 
-		$this->execute($endpoint, $data);
+		$this->execute($endpoint, $data, $method);
 
 		return $this->response;		
+	}
+	
+	/*
+	* Method to make GuzzleHttp Client Request to Instagram APIs
+	*
+	* @param string $endpoint
+	* @param array|string $options in case of POST [optional]
+	* @param string $method GET|POST
+	*/
+	protected function execute($endpoint, $options, $method = 'GET') {	
+		try {	
+			$result = $result = $this->client->request(
+				$method, 
+				$endpoint, 
+				[
+					'headers' => [
+						'Accept'     => 'application/json'
+					],
+					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
+				]
+			);
+		} catch (\GuzzleHttp\Exception\ClientException $e) {
+			throw new \Haridarshan\Instagram\InstagramException($e->getMessage());
+		}
+		
+		$limit = $result->getHeader('x-ratelimit-remaining');
+		$this->x_rate_limit_remaining = $limit[0];
+
+		$this->response = json_decode($result->getBody()->getContents());
 	}
 	
 	/*
