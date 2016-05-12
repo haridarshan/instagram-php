@@ -64,13 +64,7 @@ class Instagram {
 	* @var: array of strings
 	*/
 	private $scopes = array();
-	
-	/*
-	* Enable secure request
-	* @var: boolean
-	*/ 
-	private $secure = true;
-	
+		
 	/*
 	* Curl timeout
 	* @var: integer|decimal|long
@@ -327,15 +321,6 @@ class Instagram {
 	public function getConnectTimeout() {
 		return $this->connect_timeout;	
 	}
-	
-	/*
-	* Setter: Enfore Signed Request
-	* @param boolean $secure
-	* @return void
-	*/
-	public function setRequestSecure($secure) {
-		$this->secure = $secure;	
-	}	
 	
 	/*
 	* Setter: User Access Token
