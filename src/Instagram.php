@@ -198,29 +198,20 @@ class Instagram {
 	* @return mixed
 	*/
 	public function request($path, array $params, $method = 'GET') {
-		if (!$this->x_rate_limit_remaining) {
-			throw new \Haridarshan\Instagram\InstagramException("You have reached Instagram API Rate Limit");
-		}
+		$this->isRateLimitReached();
 		
-		if (!isset($params['access_token'])) {
-			throw new \Haridarshan\Instagram\InstagramException("$path - api requires an authenticated users access token.");
-		}
-						
+		$this->isAccessTokenPresent($path, $params);
+								
 		$this->setAccessToken($params['access_token']);	
 		
 		$authentication_method = '?access_token='.$this->access_token;
-
-		$param = '&'.http_build_query($params);
-
-		$endpoint = self::API_VERSION.$path.(('GET' === $method) ? $authentication_method.$param : null);
+		
+		$endpoint = self::API_VERSION.$path.(('GET' === $method) ? $authentication_method.'&'.http_build_query($params) : $authentication_method);
 				
-		if ($this->secure) {			
-			$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $params);
-		}
-
+		$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $params);
+		
 		$this->execute($endpoint, $params, $method);
-
-		return $this->response;		
+		return $this->response;	
 	}
 	
 	/*
@@ -370,5 +361,25 @@ class Instagram {
 	*/
 	public function getLibraryVersion() {
 		return self::VERSION;
+	}
+	
+	/*
+	* Check whether api rate limit is reached or not
+	* throws \Haridarshan\Instagram\InstagramException
+	*/
+	private function isRateLimitReached() {
+		if (!$this->x_rate_limit_remaining) {
+			throw new \Haridarshan\Instagram\InstagramException("You have reached Instagram API Rate Limit");
+		}
+	}
+	
+	/*
+	* Check whether access token is present or not
+	* throws \Haridarshan\Instagram\InstagramException
+	*/
+	private function isAccessTokenPresent($api, array $params) {
+		if (!isset($params['access_token'])) {
+			throw new \Haridarshan\Instagram\InstagramException("$api - api requires an authenticated users access token.");
+		}	
 	}
 }
