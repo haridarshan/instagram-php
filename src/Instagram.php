@@ -135,11 +135,11 @@ class Instagram {
 	*/
 	public function getUrl($path, array $parameters) {	
 		
-		if (!is_array($parameters)) {
+		if (!isset($parameters['scope'])) {
 			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
 		}
 				
-		if (isset($parameters['scope']) && count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
+		if (count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
 			$this->scopes = $parameters['scope']; 
 		} else {
 			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
