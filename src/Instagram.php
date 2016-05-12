@@ -22,7 +22,7 @@ class Instagram {
 	/*
 	* API End Point
 	*/  
-	const API_VERSION = 'v1/';
+	const API_VERSION = 'v1';
 	
 	/*
 	* API End Point
@@ -184,23 +184,13 @@ class Instagram {
 	*
 	* @return string (Signature)
 	*/
-	protected function secureRequest($endpoint, $auth, $params) {	
-		if (!is_array($params)) {
-			$params = array();	
-		}
-		
-		if ($auth) {
-			list($key, $value) = explode("=", substr($auth, 1), 2);
-			$params[$key] = $value;
-		}
-		
+	protected function secureRequest($endpoint, $params) {			
 		$signature = $endpoint;
 		ksort($params);
 		
 		foreach ($params as $key => $value) {
 			$signature .= "|$key=$value";	
 		}
-					
 		return hash_hmac('sha256', $signature, $this->getClientSecret(), false);
 	}
 	
@@ -216,25 +206,20 @@ class Instagram {
 		if (!isset($params['access_token'])) {
 			throw new \Haridarshan\Instagram\InstagramException("$path - api requires an authenticated users access token.");
 		}
-		
-		$data = $params;
-				
+						
 		$this->setAccessToken($params['access_token']);	
 		
 		$authentication_method = '?access_token='.$this->access_token;
-				
-		// Need to remove the access_token from $params array
-		unset($params['access_token']);			
 
 		$param = '&'.http_build_query($params);
 
-		$endpoint = self::API_VERSION.$path.$authentication_method.(('GET' === $method) ? $param : null);
-		
-		if ($this->secure) {
-			$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $authentication_method, $data);
+		$endpoint = self::API_VERSION.$path.(('GET' === $method) ? $authentication_method.$param : null);
+				
+		if ($this->secure) {			
+			$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $params);
 		}
 
-		$this->execute($endpoint, $data, $method);
+		$this->execute($endpoint, $params, $method);
 
 		return $this->response;		
 	}
