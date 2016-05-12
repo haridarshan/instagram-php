@@ -179,7 +179,6 @@ class Instagram {
 	* copy from Instagram API Documentation: https://www.instagram.com/developer/secure-api-requests/
 	* 
 	* @param string $endpoint
-	* @param string $auth
 	* @param array|string $params
 	*
 	* @return string (Signature)
