@@ -74,7 +74,7 @@ class Instagram {
 	private $x_rate_limit_remaining = 500;
 	
 	/*
-	* @var GuzzleHttp\ClientInterface $client
+	* @var GuzzleHttp\ClientInterface $http
 	*/
 	private $client;
 	
@@ -208,7 +208,7 @@ class Instagram {
 	protected function execute($endpoint, $options, $method = 'GET') {	
 		try {	
 			$result = $result = $this->client->request($method, $endpoint, [
-					'headers' => [ 'Accept'     => 'application/json' ],
+					'headers' => ['Accept'     => 'application/json'],
 					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
 			]);					
 			$limit = $result->getHeader('x-ratelimit-remaining');
