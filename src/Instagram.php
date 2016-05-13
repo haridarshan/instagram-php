@@ -31,49 +31,49 @@ class Instagram {
 		
 	/*
 	* Client Id
-	* @var: string
+	* @var string
 	*/
 	private $client_id;
 	
 	/*
 	* Client Secret
-	* @var: string
+	* @var string
 	*/
 	private $client_secret;
 	
 	/*
 	* Instagram Callback url
-	* @var: string
+	* @var string
 	*/
 	private $callback_url;
 	
 	/*
 	* Oauth Access Token
-	* @var: string
+	* @var string
 	*/
 	private $access_token;
 	
 	/*
 	* Instagram Available Scopes
-	* @var: array of strings
+	* @var array of strings
 	*/
 	private $default_scopes = array("basic", "public_content", "follower_list", "comments", "relationships", "likes");
 	
 	/*
 	* User's Scope
-	* @var: array of strings
+	* @var array of strings
 	*/
 	private $scopes = array();
 		
 	/*
 	* Curl timeout
-	* @var: integer|decimal|long
+	* @var integer|decimal|long
 	*/
 	private $timeout = 90;
 	
 	/*
 	* Curl Connect timeout
-	* @var: integer|decimal|long
+	* @var integer|decimal|long
 	*/
 	private $connect_timeout = 20;
 	
@@ -81,6 +81,7 @@ class Instagram {
 	* Remaining Rate Limit
 	* Sandbox = 500
 	* Live = 5000
+	* @var integer
 	*/
 	private $x_rate_limit_remaining = 500;
 	
@@ -105,7 +106,7 @@ class Instagram {
 			$this->setClientSecret($config['ClientSecret']);
 			$this->setCallbackUrl($config['Callback']);	
 		} else {
-			throw new \Haridarshan\Instagram\InstagramException('Invalid Instagram Configuration data');			
+			throw new \Haridarshan\Instagram\InstagramException('Invalid Instagram Configuration data', 400);			
 		}
 		
 		$this->client = new \GuzzleHttp\Client([
@@ -124,13 +125,13 @@ class Instagram {
 	public function getUrl($path, array $parameters) {	
 		
 		if (!isset($parameters['scope'])) {
-			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
+			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used", 400);
 		}
 				
 		if (count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
 			$this->scopes = $parameters['scope']; 
 		} else {
-			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used");
+			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used", 400);
 		}
 
 		$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code';
@@ -138,7 +139,6 @@ class Instagram {
 		$query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '';
 				
 		return sprintf('%s%s?%s', self::API_HOST, $path, $query);
-		
 	}
 	
 	/*
@@ -160,7 +160,7 @@ class Instagram {
 		$this->execute($path, $options, 'POST');
 		
 		if (isset($this->response->code)) {
-			throw new \Haridarshan\Instagram\InstagramException("return status code: ".$this->response->code." type: ".$this->response->error_type." message: ".$this->response->error_message);
+			throw new \Haridarshan\Instagram\InstagramException("returns error type: ".$this->response->error_type." message: ".$this->response->error_message, $this->response->code);
 		}
 				
 		$this->setAccessToken($this->response);
@@ -214,6 +214,9 @@ class Instagram {
 	* @param string $endpoint
 	* @param array|string $options in case of POST [optional]
 	* @param string $method GET|POST
+	*
+	* throws OAuthAccessTokenException if exception message contains error type 'OAuthAccessTokenException'
+	* else throws InstagramException
 	*/
 	protected function execute($endpoint, $options, $method = 'GET') {	
 		try {	
@@ -227,8 +230,12 @@ class Instagram {
 					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
 				]
 			);
-		} catch (\GuzzleHttp\Exception\ClientException $e) {
-			throw new \Haridarshan\Instagram\InstagramException($e->getMessage());
+		} catch (\GuzzleHttp\Exception\ClientException $e) {			
+			$exception_response = json_decode($e->getResponse()->getBody()->getContents());
+			
+			$token_exception = json_encode(array("Type" => $exception_response->meta->error_type, "Message" => $exception_response->meta->error_message));
+			
+			throw new \Haridarshan\Instagram\InstagramException($token_exception, $exception_response->meta->code, $e);			
 		}
 		
 		$limit = $result->getHeader('x-ratelimit-remaining');
@@ -354,7 +361,7 @@ class Instagram {
 	*/
 	private function isRateLimitReached() {
 		if (!$this->x_rate_limit_remaining) {
-			throw new \Haridarshan\Instagram\InstagramException("You have reached Instagram API Rate Limit");
+			throw new \Haridarshan\Instagram\InstagramException("You have reached Instagram API Rate Limit", 400);
 		}
 	}
 	
@@ -364,7 +371,7 @@ class Instagram {
 	*/
 	private function isAccessTokenPresent($api, array $params) {
 		if (!isset($params['access_token'])) {
-			throw new \Haridarshan\Instagram\InstagramException("$api - api requires an authenticated users access token.");
+			throw new \Haridarshan\Instagram\InstagramException("$api - api requires an authenticated users access token.", 400);
 		}	
 	}
 }
