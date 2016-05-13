@@ -237,11 +237,9 @@ class Instagram {
 				$exception_response->meta->code, 
 				$e
 			);			
-		}
-		
+		}		
 		$limit = $result->getHeader('x-ratelimit-remaining');
 		$this->x_rate_limit_remaining = $limit[0];
-
 		$this->response = json_decode($result->getBody()->getContents());
 	}
 	
