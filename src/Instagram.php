@@ -63,19 +63,7 @@ class Instagram {
 	* User's Scope
 	* @var array of strings
 	*/
-	private $scopes = array();
-		
-	/*
-	* Curl timeout
-	* @var integer|decimal|long
-	*/
-	private $timeout = 90;
-	
-	/*
-	* Curl Connect timeout
-	* @var integer|decimal|long
-	*/
-	private $connect_timeout = 20;
+	private $scopes = array();		
 	
 	/*
 	* Remaining Rate Limit
@@ -86,7 +74,7 @@ class Instagram {
 	private $x_rate_limit_remaining = 500;
 	
 	/*
-	* @var GuzzleHttp\ClientInterface $http
+	* @var GuzzleHttp\Client $client
 	*/
 	private $client;
 	
@@ -215,8 +203,7 @@ class Instagram {
 	* @param array|string $options in case of POST [optional]
 	* @param string $method GET|POST
 	*
-	* throws OAuthAccessTokenException if exception message contains error type 'OAuthAccessTokenException'
-	* else throws InstagramException
+	* throws InstagramException $e
 	*/
 	protected function execute($endpoint, $options, $method = 'GET') {	
 		try {	
@@ -229,7 +216,10 @@ class Instagram {
 					],
 					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
 				]
-			);
+			);					
+			$limit = $result->getHeader('x-ratelimit-remaining');
+			$this->x_rate_limit_remaining = $limit[0];
+			$this->response = json_decode($result->getBody()->getContents());
 		} catch (\GuzzleHttp\Exception\ClientException $e) {			
 			$exception_response = json_decode($e->getResponse()->getBody()->getContents());			
 			throw new \Haridarshan\Instagram\InstagramException(
@@ -237,10 +227,7 @@ class Instagram {
 				$exception_response->meta->code, 
 				$e
 			);			
-		}		
-		$limit = $result->getHeader('x-ratelimit-remaining');
-		$this->x_rate_limit_remaining = $limit[0];
-		$this->response = json_decode($result->getBody()->getContents());
+		}
 	}
 	
 	/*
@@ -293,41 +280,7 @@ class Instagram {
 	public function getCallbackUrl() {
 		return $this->callback_url;	
 	}
-	
-	/*
-	* Setter: Set Curl Timeout
-	* @param integer|decimal|long $time
-	* @return void
-	*/
-	public function setTimeout($time = 90) {
-		$this->timeout = $time;	
-	}
-	
-	/*
-	* Getter: Get Curl Timeout
-	* @return integer|decimal|long
-	*/
-	public function getTimeout() {
-		return $this->timeout;	
-	}
-	
-	/*
-	* Setter: Set Curl Timeout
-	* @param integer|decimal|long $time
-	* @return void
-	*/
-	public function setConnectTimeout($time = 20) {
-		$this->connect_timeout = $time;	
-	}
-	
-	/*
-	* Getter: Get Curl connect timeout
-	* @return integer|decimal|long
-	*/
-	public function getConnectTimeout() {
-		return $this->connect_timeout;	
-	}
-	
+		
 	/*
 	* Setter: User Access Token
 	* @param object|string $data
