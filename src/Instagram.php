@@ -12,6 +12,7 @@ namespace Haridarshan\Instagram;
 * @copyright Haridarshan Gorana
 * @version 1.0
 * @license: MIT
+*
 */
 class Instagram {
 	/*
