@@ -231,11 +231,12 @@ class Instagram {
 				]
 			);
 		} catch (\GuzzleHttp\Exception\ClientException $e) {			
-			$exception_response = json_decode($e->getResponse()->getBody()->getContents());
-			
-			$token_exception = json_encode(array("Type" => $exception_response->meta->error_type, "Message" => $exception_response->meta->error_message));
-			
-			throw new \Haridarshan\Instagram\InstagramException($token_exception, $exception_response->meta->code, $e);			
+			$exception_response = json_decode($e->getResponse()->getBody()->getContents());			
+			throw new \Haridarshan\Instagram\InstagramException(
+				json_encode(array("Type" => $exception_response->meta->error_type, "Message" => $exception_response->meta->error_message)), 
+				$exception_response->meta->code, 
+				$e
+			);			
 		}
 		
 		$limit = $result->getHeader('x-ratelimit-remaining');
