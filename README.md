@@ -15,15 +15,19 @@ composer require haridarshan/instagram-php
 
 ## Usage
 
-```
+```php
+<?php
 require 'vendor/autoload.php';
 
 use Haridarshan\Instagram\Instagram;
+?>
 ```
 
 ### Authorization Code Flow
 
-```
+```php
+<?php 
+
 $instagram = new Instagram(array(
   "ClientId" => <InstagramAppClientId>,
   "ClientSecret" => <InstagramAppClientSecret>,
@@ -42,18 +46,26 @@ $scope = [
 // To get the Instagram Login Url
 $insta_url = $instagram->getUrl("oauth/authorize",["scope" => $scope]);
 echo "<a href='{$insta_url}'>Login with Instagram</a>";
+
+?>
 ```
 
 ### Get Access Token
 
-```
+```php
+<?php
+
 // To get User's Access Token
 $insta_access_token = $instagram->getToken('oauth/access_token', $_GET['code'], true);
+
+?>
 ```
 
 ### Request to Instagram APIs
 
-```
+```php
+<?php
+
 // To get User Profile Details or to make any api call to instagram
 $user = $instagram->request("/users/self", [ "access_token" => $insta_access_token ]);
 
@@ -69,5 +81,6 @@ $delete_comment = $instagram->request(
   "DELETE"
 );
 
+?>
 ```
 
