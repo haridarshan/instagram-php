@@ -172,7 +172,7 @@ class Instagram {
 		
 		foreach ($params as $key => $value) {
 			$signature .= "|$key=$value";	
-		}
+		}		
 		return hash_hmac('sha256', $signature, $this->getClientSecret(), false);
 	}
 	
@@ -188,11 +188,11 @@ class Instagram {
 		$this->setAccessToken($params['access_token']);	
 		
 		$authentication_method = '?access_token='.$this->access_token;
-		
-		$endpoint = self::API_VERSION.$path.(('GET' === $method) ? $authentication_method.'&'.http_build_query($params) : $authentication_method);
 				
+		$endpoint = self::API_VERSION.$path.(('GET' === $method) ? '?'.http_build_query($params) : $authentication_method);
+			
 		$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $params);
-		
+				
 		$this->execute($endpoint, $params, $method);
 		return $this->response;	
 	}
@@ -208,18 +208,29 @@ class Instagram {
 	*/
 	protected function execute($endpoint, $options, $method = 'GET') {	
 		try {	
-			$result = $result = $this->client->request($method, $endpoint, [
+			$result = $this->client->request($method, $endpoint, [
 					'headers' => ['Accept'     => 'application/json'],
 					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
 			]);					
 			$limit = $result->getHeader('x-ratelimit-remaining');
 			$this->x_rate_limit_remaining = $limit[0];
 			$this->response = json_decode($result->getBody()->getContents());
-		} catch (\GuzzleHttp\Exception\ClientException $e) {			
+		} catch (\GuzzleHttp\Exception\ClientException $e) {	
 			$exception_response = json_decode($e->getResponse()->getBody()->getContents());			
+			
+			if (isset($exception_response->meta)) {
+				$error_type = $exception_response->meta->error_type;
+				$error_message = $exception_response->meta->error_message;
+				$error_code = $exception_response->meta->code;
+			} else {
+				$error_type = $exception_response->error_type;
+				$error_message = $exception_response->error_message;
+				$error_code = $exception_response->code;
+			}
+			
 			throw new \Haridarshan\Instagram\InstagramException(
-				json_encode(array("Type" => $exception_response->meta->error_type, "Message" => $exception_response->meta->error_message)), 
-				$exception_response->meta->code, 
+				json_encode(array("Type" => $error_type, "Message" => $error_message)), 
+				$error_code, 
 				$e
 			);			
 		}
