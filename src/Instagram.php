@@ -213,7 +213,7 @@ class Instagram {
 					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
 			]);					
 			$limit = $result->getHeader('x-ratelimit-remaining');
-			$this->x_rate_limit_remaining = $limit[0];
+			$this->x_rate_limit_remaining = $limit;
 			$this->response = json_decode($result->getBody()->getContents());
 		} catch (\GuzzleHttp\Exception\ClientException $e) {	
 			$exception_response = json_decode($e->getResponse()->getBody()->getContents());			
