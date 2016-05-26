@@ -100,7 +100,7 @@ class Instagram {
 			$this->setClientId($config['ClientId']);
 			$this->setClientSecret($config['ClientSecret']);
 			$this->setCallbackUrl($config['Callback']);	
-			$this->setState(isset($config['State']) ? $config['State'] : $this->generateState());
+			$this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
 		} else {
 			throw new \Haridarshan\Instagram\InstagramException('Invalid Instagram Configuration data', 400);			
 		}
@@ -321,15 +321,6 @@ class Instagram {
 		return self::VERSION;
 	}
 	
-	/*
-	* Set State paramter 
-	* @param array
-	* @return void
-	*/
-	private function setState($state) {		
-		$this->state = $state;
-	}
-	
 	/* 
 	* Get state value
 	* @return string | mixed
@@ -339,18 +330,8 @@ class Instagram {
 	}
 	
 	/*
-	* Generates a random string and returns is
-	*
-	* @access private
-	* @return string       random string
-	*/
-	private function generateState() {
-		return substr(md5(rand()), 0, 7);
-	}
-	
-	/*
 	* Check whether api rate limit is reached or not
-	* throws \Haridarshan\Instagram\InstagramException
+	* @throws \Haridarshan\Instagram\InstagramException
 	*/
 	private function isRateLimitReached() {
 		if (!$this->x_rate_limit_remaining) {
@@ -360,7 +341,7 @@ class Instagram {
 	
 	/*
 	* Check whether access token is present or not
-	* throws \Haridarshan\Instagram\InstagramException
+	* @throws \Haridarshan\Instagram\InstagramException
 	*/
 	private function isAccessTokenPresent($api, array $params) {
 		if (!isset($params['access_token'])) {
