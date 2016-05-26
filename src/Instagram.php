@@ -76,7 +76,7 @@ class Instagram {
 	* Remaining Rate Limit
 	* Sandbox = 500
 	* Live = 5000
-	* @var integer
+	* @var mixed|integer|string|array<integer,string>
 	*/
 	private $x_rate_limit_remaining = 500;
 	
