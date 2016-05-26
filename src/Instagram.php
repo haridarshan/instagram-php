@@ -67,6 +67,12 @@ class Instagram {
 	private $scopes = array();		
 	
 	/*
+	* Random string indicating the state to prevent spoofing
+	* @var string
+	*/
+	private $state;
+	
+	/*
 	* Remaining Rate Limit
 	* Sandbox = 500
 	* Live = 5000
@@ -94,6 +100,7 @@ class Instagram {
 			$this->setClientId($config['ClientId']);
 			$this->setClientSecret($config['ClientSecret']);
 			$this->setCallbackUrl($config['Callback']);	
+			$this->setState(isset($config['State']) ? $config['State'] : $this->generateState());
 		} else {
 			throw new \Haridarshan\Instagram\InstagramException('Invalid Instagram Configuration data', 400);			
 		}
@@ -123,7 +130,7 @@ class Instagram {
 			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used", 400);
 		}
 
-		$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code';
+		$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code&state='.$this->state;
 
 		$query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '';
 				
@@ -143,7 +150,8 @@ class Instagram {
 			"client_id" => $this->getClientId(),
 			"client_secret" => $this->getClientSecret(),
 			"redirect_uri" => $this->getCallbackUrl(),
-			"code" => $code
+			"code" => $code,
+            "state" => $this->state
 		);
 			
 		$this->execute($path, $options, 'POST');
@@ -312,6 +320,33 @@ class Instagram {
 	public function getLibraryVersion() {
 		return self::VERSION;
 	}
+	
+	/*
+	* Set State paramter 
+	* @param array
+	* @return void
+	*/
+	private function setState($state) {		
+		$this->state = $state;
+	}
+	
+	/* 
+	* Get state value
+	* @return string | mixed
+	*/
+	public function getState() {
+		return $this->state;	
+	}
+	
+	/*
+	* Generates a random string and returns is
+	*
+	* @access private
+	* @return string       random string
+	*/
+    private function generateState() {
+        return substr(md5(rand()), 0, 7);
+    }
 	
 	/*
 	* Check whether api rate limit is reached or not
