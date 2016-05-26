@@ -86,7 +86,7 @@ class Instagram {
 	private $client;
 	
 	/*
-	* @var \GuzzleHttp\Psr7\Response $response
+	* @var $response
 	*/
 	private $response;
 		
@@ -155,7 +155,7 @@ class Instagram {
 		);
 			
 		$this->execute($path, $options, 'POST');
-		
+				
 		if (isset($this->response->code)) {
 			throw new \Haridarshan\Instagram\InstagramException("returns error type: ".$this->response->error_type." message: ".$this->response->error_message, $this->response->code);
 		}
@@ -202,6 +202,7 @@ class Instagram {
 		$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $params);
 				
 		$this->execute($endpoint, $params, $method);
+		
 		return $this->response;	
 	}
 	
@@ -212,7 +213,7 @@ class Instagram {
 	* @param array|string $options in case of POST [optional]
 	* @param string $method GET|POST
 	*
-	* throws InstagramException $e
+	* @throws InstagramException $e
 	*/
 	protected function execute($endpoint, $options, $method = 'GET') {	
 		try {	
