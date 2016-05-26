@@ -250,7 +250,7 @@ class Instagram {
 	* @param string $method GET|POST
 	* @return string|mixed
 	*/
-	private function createBody($options, $method){
+	private function createBody($options, $method) {
 		return ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null;
 	}	
 	
