@@ -151,7 +151,7 @@ class Instagram {
 			"client_secret" => $this->getClientSecret(),
 			"redirect_uri" => $this->getCallbackUrl(),
 			"code" => $code,
-            "state" => $this->state
+			"state" => $this->state
 		);
 			
 		$this->execute($path, $options, 'POST');
@@ -344,9 +344,9 @@ class Instagram {
 	* @access private
 	* @return string       random string
 	*/
-    private function generateState() {
-        return substr(md5(rand()), 0, 7);
-    }
+	private function generateState() {
+		return substr(md5(rand()), 0, 7);
+	}
 	
 	/*
 	* Check whether api rate limit is reached or not
