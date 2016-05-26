@@ -81,7 +81,7 @@ class Instagram {
 	private $x_rate_limit_remaining = 500;
 	
 	/*
-	* @var GuzzleHttp\ClientInterface $http
+	* @var GuzzleHttp\Client $client
 	*/
 	private $client;
 	
