@@ -31,7 +31,8 @@ use Haridarshan\Instagram\Instagram;
 $instagram = new Instagram(array(
   "ClientId" => <InstagramAppClientId>,
   "ClientSecret" => <InstagramAppClientSecret>,
-  "Callback" => <callback_url>
+  "Callback" => <callback_url>,
+  "State" => <state_param_value> // Optional parameter: if not defined it will generate a random string
 ));
 
 $scope = [
