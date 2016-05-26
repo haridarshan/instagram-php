@@ -219,7 +219,7 @@ class Instagram {
 	* @param \GuzzleHttp\Exception\ClientException $ex
 	* @return object
 	*/
-	private function generateExceptionMessage($ex) {
+	private function generateExceptionMessage(\GuzzleHttp\Exception\ClientException $ex) {
 		$exception = json_decode($ex->getResponse()->getBody()->getContents());					
 		$message = array();		
 		if (isset($exception->meta)) {
