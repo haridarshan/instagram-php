@@ -219,7 +219,7 @@ class Instagram {
 		try {	
 			$result = $this->client->request($method, $endpoint, [
 					'headers' => ['Accept'     => 'application/json'],
-					'body' => ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null
+					'body' => $this->createBody($options, $method)
 			]);					
 			$limit = $result->getHeader('x-ratelimit-remaining');
 			$this->x_rate_limit_remaining = $limit;
@@ -244,6 +244,16 @@ class Instagram {
 			);			
 		}
 	}
+	
+	/*
+	* Create body for Guzzle client request
+	* @param array|null|string $options
+	* @param string $method GET|POST
+	* @return string|mixed
+	*/
+	private function createBody($options, $method){
+		return ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null;
+	}	
 	
 	/*
 	* Setter: Client Id
