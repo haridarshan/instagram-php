@@ -103,8 +103,7 @@ class Instagram {
 			$this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
 		} else {
 			throw new \Haridarshan\Instagram\InstagramException('Invalid Instagram Configuration data', 400);			
-		}
-		
+		}		
 		$this->client = new \GuzzleHttp\Client([
 			'base_uri' => self::API_HOST
 		]);
@@ -118,22 +117,17 @@ class Instagram {
 	*
 	* @return string
 	*/
-	public function getUrl($path, array $parameters) {	
-		
+	public function getUrl($path, array $parameters) {			
 		if (!isset($parameters['scope'])) {
 			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used", 400);
-		}
-				
+		}				
 		if (count(array_diff($parameters['scope'], $this->default_scopes)) === 0) {
 			$this->scopes = $parameters['scope']; 
 		} else {
 			throw new \Haridarshan\Instagram\InstagramException("Missing or Invalid Scope permission used", 400);
 		}
-
 		$query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code&state='.$this->state;
-
-		$query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '';
-				
+		$query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '';				
 		return sprintf('%s%s?%s', self::API_HOST, $path, $query);
 	}
 	
@@ -152,16 +146,12 @@ class Instagram {
 			"redirect_uri" => $this->getCallbackUrl(),
 			"code" => $code,
 			"state" => $this->state
-		);
-			
-		$this->execute($path, $options, 'POST');
-				
+		);			
+		$this->execute($path, $options, 'POST');				
 		if (isset($this->response->code)) {
 			throw new \Haridarshan\Instagram\InstagramException("returns error type: ".$this->response->error_type." message: ".$this->response->error_message, $this->response->code);
-		}
-				
-		$this->setAccessToken($this->response);
-				
+		}				
+		$this->setAccessToken($this->response);				
 		return !$token ? $this->response : $this->response->access_token;
 	}
 	
@@ -176,8 +166,7 @@ class Instagram {
 	*/
 	protected function secureRequest($endpoint, $params) {			
 		$signature = $endpoint;
-		ksort($params);
-		
+		ksort($params);		
 		foreach ($params as $key => $value) {
 			$signature .= "|$key=$value";	
 		}		
@@ -189,20 +178,13 @@ class Instagram {
 	* @return mixed
 	*/
 	public function request($path, array $params, $method = 'GET') {
-		$this->isRateLimitReached();
-		
-		$this->isAccessTokenPresent($path, $params);
-								
-		$this->setAccessToken($params['access_token']);	
-		
-		$authentication_method = '?access_token='.$this->access_token;
-				
-		$endpoint = self::API_VERSION.$path.(('GET' === $method) ? '?'.http_build_query($params) : $authentication_method);
-			
-		$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $params);
-				
-		$this->execute($endpoint, $params, $method);
-		
+		$this->isRateLimitReached();		
+		$this->isAccessTokenPresent($path, $params);								
+		$this->setAccessToken($params['access_token']);			
+		$authentication_method = '?access_token='.$this->access_token;				
+		$endpoint = self::API_VERSION.$path.(('GET' === $method) ? '?'.http_build_query($params) : $authentication_method);			
+		$endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.$this->secureRequest($path, $params);				
+		$this->execute($endpoint, $params, $method);		
 		return $this->response;	
 	}
 	
@@ -223,25 +205,33 @@ class Instagram {
 			]);					
 			$this->x_rate_limit_remaining = $result->getHeader('x-ratelimit-remaining');
 			$this->response = json_decode($result->getBody()->getContents());
-		} catch (\GuzzleHttp\Exception\ClientException $e) {	
-			$exception_response = json_decode($e->getResponse()->getBody()->getContents());			
-			
-			if (isset($exception_response->meta)) {
-				$error_type = $exception_response->meta->error_type;
-				$error_message = $exception_response->meta->error_message;
-				$error_code = $exception_response->meta->code;
-			} else {
-				$error_type = $exception_response->error_type;
-				$error_message = $exception_response->error_message;
-				$error_code = $exception_response->code;
-			}
-			
+		} catch (\GuzzleHttp\Exception\ClientException $e) {
+			$exception_message = json_decode($this->generateExceptionMessage($e));	
 			throw new \Haridarshan\Instagram\InstagramException(
-				json_encode(array("Type" => $error_type, "Message" => $error_message)), 
-				$error_code, 
+				json_encode(array("Type" => $exception_message->error_type, "Message" => $exception_message->error_message)), 
+				$exception_message->error_code, 
 				$e
 			);			
 		}
+	}
+	
+	/*
+	* @param \GuzzleHttp\Exception\ClientException $ex
+	* @return object
+	*/
+	private function generateExceptionMessage($ex) {
+		$exception = json_decode($ex->getResponse()->getBody()->getContents());					
+		$message = array();		
+		if (isset($exception->meta)) {
+			$message['error_type'] = $exception->meta->error_type;
+			$message['error_message'] = $exception->meta->error_message;
+			$message['error_code'] = $exception->meta->code;
+		} else {
+			$message['error_type'] = $exception->error_type;
+			$message['error_message'] = $exception->error_message;
+			$message['error_code'] = $exception->code;
+		}		
+		return json_encode($message);
 	}
 	
 	/*
