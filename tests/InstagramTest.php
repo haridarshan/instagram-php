@@ -29,6 +29,6 @@ class InstagramTest extends \PHPUnit_Framework_TestCase {
 		
 		$url = $this->instagram->getUrl("oauth/authorize",["scope" => $scope]);
 		
-		$this->assertEquals('https://api.instagram.com/oauth/authorize?client_id='.CLIENT_ID.'&redirect_uri='.urlencode(CALLBACK_URL).'&response_type=code&scope=basic', $url);
+		$this->assertEquals('https://api.instagram.com/oauth/authorize?client_id='.CLIENT_ID.'&redirect_uri='.urlencode(CALLBACK_URL).'&response_type=code&state=test&scope=basic', $url);
 	}
 }
