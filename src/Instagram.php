@@ -221,8 +221,7 @@ class Instagram {
 					'headers' => ['Accept'     => 'application/json'],
 					'body' => $this->createBody($options, $method)
 			]);					
-			$limit = $result->getHeader('x-ratelimit-remaining');
-			$this->x_rate_limit_remaining = $limit;
+			$this->x_rate_limit_remaining = $result->getHeader('x-ratelimit-remaining');
 			$this->response = json_decode($result->getBody()->getContents());
 		} catch (\GuzzleHttp\Exception\ClientException $e) {	
 			$exception_response = json_decode($e->getResponse()->getBody()->getContents());			
