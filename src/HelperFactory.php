@@ -111,13 +111,13 @@ class HelperFactory
             $e
         );
     }
-	/*
+    /*
 	 * @param \stdClass $object
 	 * @return array
 	 */
-	protected static function getExceptionMessage(\stdClass $object)
-	{
-		$message = array();
+    protected static function getExceptionMessage(\stdClass $object)
+    {
+        $message = array();
         if (isset($object->meta)) {
             $message['error_type'] = $object->meta->error_type;
             $message['error_message'] = $object->meta->error_message;
@@ -127,6 +127,6 @@ class HelperFactory
             $message['error_message'] = $object->error_message;
             $message['error_code'] = $object->code;
         }
-		return $message;
-	}
+        return $message;
+    }
 }
