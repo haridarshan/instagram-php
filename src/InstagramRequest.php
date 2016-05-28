@@ -2,10 +2,10 @@
 namespace Haridarshan\Instagram;
 
 use Haridarshan\Instagram\Constants;
+use Haridarshan\Instagram\Exceptions\InstagramThrottleException;
 use Haridarshan\Instagram\HelperFactory;
 use Haridarshan\Instagram\Instagram;
 use Haridarshan\Instagram\InstagramResponse;
-use Haridarshan\Instagram\Exceptions\InstagramThrottleException;
 
 class InstagramRequest
 {
