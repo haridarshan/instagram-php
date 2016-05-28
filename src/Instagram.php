@@ -68,7 +68,6 @@ class Instagram
 	
     /*
      * Make URLs for user browser navigation
-     * @param string $path
      * @param array  $parameters
      * @return string
      */
