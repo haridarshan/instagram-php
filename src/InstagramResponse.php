@@ -121,4 +121,13 @@ class InstagramResponse
 	{
 		return $this->body->data;
 	}
+	
+	/*
+	 * Get Meta data
+	 * @return object
+	 */
+	public function getMetaData()
+	{
+		return $this->metaData;
+	}
 }
