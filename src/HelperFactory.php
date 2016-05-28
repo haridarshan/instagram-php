@@ -36,8 +36,8 @@ class HelperFactory
             'base_uri' => $uri
         ]);
     }
-    
-    /*
+
+    /*	
      * @param Client $client
      * @param string $endpoint
      * @param array|string $options
