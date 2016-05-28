@@ -111,6 +111,7 @@ class HelperFactory
             $e
         );
     }
+	
     /*
 	 * @param \stdClass $object
 	 * @return array
