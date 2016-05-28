@@ -1,11 +1,11 @@
 <?php
 namespace Haridarshan\Instagram;
 
-use Haridarshan\Instagram\HelperFactory;
 use Haridarshan\Instagram\Constants;
+use Haridarshan\Instagram\HelperFactory;
 use Haridarshan\Instagram\Instagram;
 use Haridarshan\Instagram\InstagramResponse;
-use Haridarshan\Instagram\Exceptions\InstagramResponseException;
+use Haridarshan\Instagram\Exceptions\InstagramThrottleException;
 
 class InstagramRequest
 {

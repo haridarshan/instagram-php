@@ -3,7 +3,6 @@ namespace Haridarshan\Instagram;
 
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
-use Haridarshan\Instagram\
 use Haridarhan\Instagram\Exceptions\InstagramResponseException;
 
 class InstagramResponse

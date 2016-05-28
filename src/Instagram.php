@@ -15,11 +15,9 @@
 namespace Haridarshan\Instagram;
 
 use Haridarshan\Instagram\Constants;
-use Haridarshan\Instagram\InstagramOAuth;
-use Haridarshan\Instagram\HelperFactory;
 use Haridarshan\Instagram\Exceptions\InstagramException;
-use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
-use Haridarshan\Instagram\Exceptions\InstagramThrottleException;
+use Haridarshan\Instagram\HelperFactory;
+use Haridarshan\Instagram\InstagramOAuth;
 
 class Instagram
 {

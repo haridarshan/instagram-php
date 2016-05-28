@@ -2,13 +2,13 @@
 namespace Haridarshan\Instagram;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
-use GuzzleHttp\Exception\ClientException;
-use Haridarshan\Instagram\InstagramResponse;
 use Haridarshan\Instagram\Exceptions\InstagramException;
-use Haridarshan\Instagram\Exceptions\InstagramServerException;
 use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
+use Haridarshan\Instagram\InstagramResponse;
+use Haridarshan\Instagram\Exceptions\InstagramServerException;
 
 class HelperFactory
 {
@@ -39,12 +39,11 @@ class HelperFactory
     }
     
     /*
-     *
      * @param Client $client
      * @param string $endpoint
      * @param array|string $options
      * @param string $method
-     * @return InstagramResponse
+     * @return Response
      * @throws InstagramOAuthException
      * @throws InstagramException
      */
@@ -66,7 +65,7 @@ class HelperFactory
      * @param string $method GET|POST
      * @return string|mixed
      */
-    private static function createBody($options, $method)
+    protected static function createBody($options, $method)
     {
         return ('GET' !== $method) ? is_array($options) ? http_build_query($options) : ltrim($options, '&') : null;
     }
@@ -76,7 +75,7 @@ class HelperFactory
      * @param ClientException $e
      * @return
      */
-    private static function extractOriginalExceptionMessage(ClientException $e)
+    protected static function extractOriginalExceptionMessage(ClientException $e)
     {
         self::$response = $e->getResponse();
         self::$stream = self::$response->getBody();
@@ -94,9 +93,10 @@ class HelperFactory
     
     /*
      * @param object $object
+	 * @param ClientException $e
      * @return void
      */
-    private static function throwException($object, $e)
+    protected static function throwException($object, $e)
     {
         $exception = array();
         if (isset($object->meta)) {
