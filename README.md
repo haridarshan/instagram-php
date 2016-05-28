@@ -81,7 +81,7 @@ $media_comment = new InstagramRequest(
 );
 $media_response = $media_comment->getResponse();
 
-$delete_comment = $instagram->request(
+$delete_comment = new InstagramRequest(
   $instagram,
   "/media/{media-id}/comments/{comment-id}", 
   [ "access_token" => $insta_access_token], 
@@ -92,3 +92,19 @@ $delete_response = $delete_comment->getResponse();
 ?>
 ```
 
+### Common Methods 
+
+```php
+<?php
+  // To get User Profile Details or to make any api call to instagram
+  $user = new InstagramRequest($instagram, "/users/self", [ "access_token" => $insta_access_token ]);
+  // To get Response
+  $user_response = $user->getResponse();
+  // To get Body part
+  $user_body = $user_response->getBody();
+  // To get Data part only
+  $user_data = $user_response->getData();
+  // To get MetaData part
+  $user_meta_data = $user_response->getMetaData();
+?>
+```
