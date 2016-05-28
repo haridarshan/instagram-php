@@ -86,7 +86,7 @@ class InstagramRequest
      */
     public function getResponse()
     {
-		$this->isRateLimitReached();
+        $this->isRateLimitReached();
         $this->isAccessTokenPresent();
         $oauth = $this->instagram->getOAuth();
         if (!$oauth->isAccessTokenSet()) {
