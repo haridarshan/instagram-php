@@ -113,12 +113,11 @@ class HelperFactory
                 $exception['error_code'],
                 $e
             );
-        } else {
-            throw new InstagramException(
-                json_encode(array("Type" => $exception['error_type'], "Message" => $exception['error_message'])),
-                $exception['error_code'],
-                $e
-            );
         }
+		throw new InstagramException(
+			json_encode(array("Type" => $exception['error_type'], "Message" => $exception['error_message'])),
+			$exception['error_code'],
+			$e
+		);
     }
 }
