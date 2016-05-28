@@ -12,10 +12,10 @@ class InstagramOAuth
     private $user;
     
     /*
-     * @param object $oauth
+     * @param \stdClass $oauth
      * @throws InstagramOAuthException
      */
-    public function __construct($oauth)
+    public function __construct(\stdClass $oauth)
     {
         if (!empty($oauth)) {
             $this->accessToken = $oauth->access_token;

@@ -51,7 +51,7 @@ class InstagramResponse
 	 * @param Response $response
 	 * @return void
 	 */
-    private function setParams($response)
+    private function setParams(Response $response)
     {
         $this->protocol = $response->getProtocolVersion();
         $this->statusCode = (int) $response->getStatusCode();

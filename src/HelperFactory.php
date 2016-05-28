@@ -91,11 +91,11 @@ class HelperFactory
     }
     
     /*
-     * @param object $object
+     * @param \stdClass $object
 	 * @param ClientException $e
      * @return void
      */
-    protected static function throwException(object $object, $e)
+    protected static function throwException(\stdClass $object, ClientException $e)
     {
         $exception = array();
         if (isset($object->meta)) {
