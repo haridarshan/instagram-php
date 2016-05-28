@@ -118,7 +118,7 @@ class InstagramResponse
 	 */
 	public function getData()
 	{
-		return $this->body->data;
+		return $this->data;
 	}
 	
 	/*
@@ -128,5 +128,41 @@ class InstagramResponse
 	public function getMetaData()
 	{
 		return $this->metaData;
+	}
+	
+	/*
+	 * Get Meta data
+	 * @return object
+	 */
+	public function getPagination()
+	{
+		return $this->pagination;
+	}
+	
+	/*
+	 * Is Meta Data Present
+	 * @return bool
+	 */
+	public function isMetaDataSet()
+	{
+		return $this->isMetaData;
+	}
+	
+	/*
+	 * Is Pagination present
+	 * @return bool
+	 */
+	public function isPaginationSet()
+	{
+		return $this->isPagination;
+	}
+	
+	/*
+	 * Get Protocol version
+	 * @return string
+	 */
+	public function getProtocol()
+	{
+		return $this->protocol;
 	}
 }

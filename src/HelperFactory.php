@@ -7,7 +7,6 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use Haridarshan\Instagram\Exceptions\InstagramException;
 use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
-use Haridarshan\Instagram\InstagramResponse;
 use Haridarshan\Instagram\Exceptions\InstagramServerException;
 
 class HelperFactory
@@ -96,7 +95,7 @@ class HelperFactory
 	 * @param ClientException $e
      * @return void
      */
-    protected static function throwException($object, $e)
+    protected static function throwException(object $object, $e)
     {
         $exception = array();
         if (isset($object->meta)) {
