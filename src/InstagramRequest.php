@@ -3,6 +3,7 @@ namespace Haridarshan\Instagram;
 
 use Haridarshan\Instagram\Constants;
 use Haridarshan\Instagram\Exceptions\InstagramRequestException;
+use Haridarshan\Instagram\Exceptions\InstagramResponseException;
 use Haridarshan\Instagram\Exceptions\InstagramThrottleException;
 use Haridarshan\Instagram\HelperFactory;
 use Haridarshan\Instagram\Instagram;
@@ -65,8 +66,13 @@ class InstagramRequest
         $endpoint = Constants::API_VERSION.$this->path.(('GET' === $this->method) ? '?'.http_build_query($this->params) : $authentication_method);
         $endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.static::generateSignature($this->instagram->getClientSecret(), $this->path, $this->params);
         
-        $this->response = new InstagramResponse(HelperFactory::request($this->instagram->getHttpClient(), $endpoint, $this->params, $this->method));
-        $this->xRateLimitRemaining = $this->response->getHeader('X-Ratelimit-Remaining');
+		$request = HelperFactory::request($this->instagram->getHttpClient(), $endpoint, $this->params, $this->method);
+		if ($request != null) {
+        	$this->response = new InstagramResponse($request);
+        	$this->xRateLimitRemaining = $this->response->getHeader('X-Ratelimit-Remaining');
+		} else {
+			throw new InstagramResponseException("400 Bad Request: instanceof InstagramResponse cannot be null", 400);
+		}
     }
     
     /*
