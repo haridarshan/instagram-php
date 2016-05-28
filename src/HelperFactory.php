@@ -97,16 +97,7 @@ class HelperFactory
      */
     protected static function throwException(\stdClass $object, ClientException $e)
     {
-        $exception = array();
-        if (isset($object->meta)) {
-            $exception['error_type'] = $object->meta->error_type;
-            $exception['error_message'] = $object->meta->error_message;
-            $exception['error_code'] = $object->meta->code;
-        } else {
-            $exception['error_type'] = $object->error_type;
-            $exception['error_message'] = $object->error_message;
-            $exception['error_code'] = $object->code;
-        }
+        $exception = static::getExceptionMessage($object);
         if (stripos($exception['error_type'], "oauth") !== false) {
             throw new InstagramOAuthException(
                 json_encode(array("Type" => $exception['error_type'], "Message" => $exception['error_message'])),
@@ -120,4 +111,22 @@ class HelperFactory
             $e
         );
     }
+	/*
+	 * @param \stdClass $object
+	 * @return array
+	 */
+	protected static function getExceptionMessage(\stdClass $object)
+	{
+		$message = array();
+        if (isset($object->meta)) {
+            $message['error_type'] = $object->meta->error_type;
+            $message['error_message'] = $object->meta->error_message;
+            $message['error_code'] = $object->meta->code;
+        } else {
+            $message['error_type'] = $object->error_type;
+            $message['error_message'] = $object->error_message;
+            $message['error_code'] = $object->code;
+        }
+		return $message;
+	}
 }
