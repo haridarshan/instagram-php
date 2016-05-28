@@ -56,12 +56,6 @@ class InstagramRequest
      */
     protected function execute()
     {
-        $this->isRateLimitReached();
-        $this->isAccessTokenPresent();
-        $oauth = $this->instagram->getOAuth();
-        if (!$oauth->isAccessTokenSet()) {
-            $oauth->setAccessToken($this->params['access_token']);
-        }
         $authentication_method = '?access_token='.$this->params['access_token'];
         $endpoint = Constants::API_VERSION.$this->path.(('GET' === $this->method) ? '?'.http_build_query($this->params) : $authentication_method);
         $endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.static::generateSignature($this->instagram->getClientSecret(), $this->path, $this->params);
@@ -92,6 +86,12 @@ class InstagramRequest
      */
     public function getResponse()
     {
+		$this->isRateLimitReached();
+        $this->isAccessTokenPresent();
+        $oauth = $this->instagram->getOAuth();
+        if (!$oauth->isAccessTokenSet()) {
+            $oauth->setAccessToken($this->params['access_token']);
+        }
         $this->execute();
         return $this->response;
     }
