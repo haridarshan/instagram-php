@@ -67,7 +67,7 @@ class InstagramRequest
         $endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.static::generateSignature($this->instagram->getClientSecret(), $this->path, $this->params);
         
 		$request = HelperFactory::request($this->instagram->getHttpClient(), $endpoint, $this->params, $this->method);
-		if ($request != null) {
+		if ($request !== null) {
         	$this->response = new InstagramResponse($request);
         	$this->xRateLimitRemaining = $this->response->getHeader('X-Ratelimit-Remaining');
 		} else {
