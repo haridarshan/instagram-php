@@ -6,7 +6,7 @@ use Haridarshan\Instagram\Exceptions\InstagramResponseException;
 
 class InstagramResponse
 {
-	/** @var int $status_code */
+    /** @var int $status_code */
     private $statusCode;
 	
     /** @var string $protocol */
