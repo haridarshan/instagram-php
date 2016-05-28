@@ -45,7 +45,7 @@ $scope = [
 ];
 
 // To get the Instagram Login Url
-$insta_url = $instagram->getUrl("oauth/authorize",["scope" => $scope]);
+$insta_url = $instagram->getLoginUrl(["scope" => $scope]);
 echo "<a href='{$insta_url}'>Login with Instagram</a>";
 
 ?>
@@ -55,10 +55,11 @@ echo "<a href='{$insta_url}'>Login with Instagram</a>";
 
 ```php
 <?php
-
+$oauth = $instagram->oauth($_GET['code']);
 // To get User's Access Token
-$insta_access_token = $instagram->getToken('oauth/access_token', $_GET['code'], true);
-
+$insta_access_token = $oauth->getAccessToken();
+// To get User's Info Token
+$user_info = $oauth->getUserInfo();
 ?>
 ```
 
@@ -68,19 +69,25 @@ $insta_access_token = $instagram->getToken('oauth/access_token', $_GET['code'], 
 <?php
 
 // To get User Profile Details or to make any api call to instagram
-$user = $instagram->request("/users/self", [ "access_token" => $insta_access_token ]);
+$user = new InstagramRequest($instagram, "/users/self", [ "access_token" => $insta_access_token ]);
+// To get Response
+$user_response = $user->getResponse();
 
-$media_comment = $instagram->request(
+$media_comment = new InstagramRequest(
+  $instagram,
   "/media/{media-id}/comments", 
   [ "access_token" => $insta_access_token, "text" => "{comment}" ], 
   "POST"
 );
+$media_response = $media_comment->getResponse();
 
 $delete_comment = $instagram->request(
+  $instagram,
   "/media/{media-id}/comments/{comment-id}", 
   [ "access_token" => $insta_access_token], 
   "DELETE"
 );
+$delete_response = $delete_comment->getResponse();
 
 ?>
 ```
