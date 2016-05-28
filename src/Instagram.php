@@ -101,10 +101,10 @@ class Instagram
             "code" => $code,
             "state" => $this->state
         );
-		$response = HelperFactory::request($this->client, Constants::API_TOKEN, $options, 'POST');
-		$this->oauthResponse = new InstagramOAuth(
-			json_decode($response->getBody()->getContents())
-		);
+        $response = HelperFactory::request($this->client, Constants::API_TOKEN, $options, 'POST');
+        $this->oauthResponse = new InstagramOAuth(
+            json_decode($response->getBody()->getContents())
+        );
         return $this->oauthResponse;
     }
    
