@@ -13,7 +13,6 @@ class InstagramOAuth
     
     /*
      * @param object $oauth
-     * @return this
      * @throws InstagramOAuthException
      */
     public function __construct($oauth)

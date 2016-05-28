@@ -38,8 +38,6 @@ class InstagramRequest
      * @param string $path
      * @param array $params
      * @param string $method
-     *
-     * @return InstagramResponse
      */
     public function __construct(Instagram $instagram, $path, array $params = array(), $method = 'GET')
     {

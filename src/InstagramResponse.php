@@ -2,7 +2,7 @@
 namespace Haridarshan\Instagram;
 
 use GuzzleHttp\Psr7\Response;
-use Haridarhan\Instagram\Exceptions\InstagramResponseException;
+use Haridarshan\Instagram\Exceptions\InstagramResponseException;
 
 class InstagramResponse
 {	
@@ -35,7 +35,6 @@ class InstagramResponse
 	
 	/*
 	 * @param Response $response
-	 * @return this
 	 * @throws InstagramResponseException
 	 */
     public function __construct(Response $response)
