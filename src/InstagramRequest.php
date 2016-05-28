@@ -60,13 +60,13 @@ class InstagramRequest
         $endpoint = Constants::API_VERSION.$this->path.(('GET' === $this->method) ? '?'.http_build_query($this->params) : $authentication_method);
         $endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.static::generateSignature($this->instagram->getClientSecret(), $this->path, $this->params);
         
-		$request = HelperFactory::request($this->instagram->getHttpClient(), $endpoint, $this->params, $this->method);
-		if ($request !== null) {
-        	$this->response = new InstagramResponse($request);
-        	$this->xRateLimitRemaining = $this->response->getHeader('X-Ratelimit-Remaining');
-		} else {
-			throw new InstagramResponseException("400 Bad Request: instanceof InstagramResponse cannot be null", 400);
-		}
+        $request = HelperFactory::request($this->instagram->getHttpClient(), $endpoint, $this->params, $this->method);
+        if ($request !== null) {
+            $this->response = new InstagramResponse($request);
+            $this->xRateLimitRemaining = $this->response->getHeader('X-Ratelimit-Remaining');
+        } else {
+            throw new InstagramResponseException("400 Bad Request: instanceof InstagramResponse cannot be null", 400);
+        }
     }
     
     /*
