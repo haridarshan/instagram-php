@@ -89,12 +89,10 @@ class Instagram
 	
     /*
      * Get the Oauth Access Token of a user from callback code
-     *
-     * @param string $path - OAuth Access Token Path
      * @param string $code - Oauth2 Code returned with callback url after successfull login
-     * @param boolean $token - true will return only access token
+     * @return InstagramOAuth
      */
-    public function oauth($code, $token = false)
+    public function oauth($code)
     {
         $options = array(
             "grant_type" => "authorization_code",
@@ -104,8 +102,9 @@ class Instagram
             "code" => $code,
             "state" => $this->state
         );
+		$response = HelperFactory::request($this->client, Constants::API_TOKEN, $options, 'POST');
 		$this->oauthResponse = new InstagramOAuth(
-			json_decode((HelperFactory::request($this->client, Constants::API_TOKEN, $options, 'POST'))->getBody()->getContents())
+			json_decode($response->getBody()->getContents())
 		);
         return $this->oauthResponse;
     }
