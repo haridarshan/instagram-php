@@ -20,6 +20,10 @@ composer require haridarshan/instagram-php
 require 'vendor/autoload.php';
 
 use Haridarshan\Instagram\Instagram;
+use Haridarshan\Instagram\InstagramRequest;
+use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
+use Haridarshan\Instagram\Exceptions\InstagramResponseException;
+use Haridarshan\Instagram\Exceptions\InstagramServerException;
 ?>
 ```
 
@@ -55,11 +59,15 @@ echo "<a href='{$insta_url}'>Login with Instagram</a>";
 
 ```php
 <?php
-$oauth = $instagram->oauth($_GET['code']);
-// To get User's Access Token
-$insta_access_token = $oauth->getAccessToken();
-// To get User's Info Token
-$user_info = $oauth->getUserInfo();
+try {
+  $oauth = $instagram->oauth($_GET['code']);
+  // To get User's Access Token
+  $insta_access_token = $oauth->getAccessToken();
+  // To get User's Info Token
+  $user_info = $oauth->getUserInfo();
+} catch (InstagramOAuthException $e) {
+  echo $e->getMessage();
+}
 ?>
 ```
 
@@ -67,11 +75,16 @@ $user_info = $oauth->getUserInfo();
 
 ```php
 <?php
-
-// To get User Profile Details or to make any api call to instagram
-$user = new InstagramRequest($instagram, "/users/self", [ "access_token" => $insta_access_token ]);
-// To get Response
-$user_response = $user->getResponse();
+try {
+  // To get User Profile Details or to make any api call to instagram
+  $user = new InstagramRequest($instagram, "/users/self", [ "access_token" => $insta_access_token ]);
+  // To get Response
+  $user_response = $user->getResponse();
+} catch(InstagramResponseException $e) {
+  echo $e->getMessage();
+} catch(InstagramServerException $e) {
+  echo $e->getMessage();
+}
 
 $media_comment = new InstagramRequest(
   $instagram,
