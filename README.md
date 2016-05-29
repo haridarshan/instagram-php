@@ -24,6 +24,7 @@ use Haridarshan\Instagram\InstagramRequest;
 use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
 use Haridarshan\Instagram\Exceptions\InstagramResponseException;
 use Haridarshan\Instagram\Exceptions\InstagramServerException;
+
 ?>
 ```
 
