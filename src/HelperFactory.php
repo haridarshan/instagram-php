@@ -11,7 +11,7 @@ use Haridarshan\Instagram\Exceptions\InstagramServerException;
 
 class HelperFactory
 {
-	/** @var Singleton The reference to *Singleton* instance of this class */
+	/** @var HelperFactory The reference to *HelperFactory* instance of this class */
 	private static $instance;
 	
     /** @var Response $response */
@@ -24,9 +24,9 @@ class HelperFactory
     protected static $content;
     
 	/*
-     * Returns the *Singleton* instance of this class.
+     * Returns the *HelperFactory* instance of this class.
      *
-     * @return Singleton The *Singleton* instance.
+     * @return HelperFactory The *HelperFactory* instance.
      */
     public static function getInstance()
     {
@@ -39,7 +39,7 @@ class HelperFactory
 	
 	/*
      * Protected constructor to prevent creating a new instance of the
-     * *Singleton* via the `new` operator from outside of this class.
+     * *HelperFactory* via the `new` operator from outside of this class.
      */
     protected function __construct()
     {
@@ -147,7 +147,7 @@ class HelperFactory
 	
 	/*
      * Private clone method to prevent cloning of the instance of the
-     * *Singleton* instance.
+     * *HelperFactory* instance.
      *
      * @return void
      */
