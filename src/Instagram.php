@@ -62,7 +62,8 @@ class Instagram
 		$this->setClientSecret($config['ClientSecret']);
 		$this->setCallbackUrl($config['Callback']);
 		$this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
-        $this->client = HelperFactory::client(Constants::API_HOST);
+		$helper = HelperFactory::getInstance();
+        $this->client = $helper->client(Constants::API_HOST);
     }
 	
     /*
@@ -99,7 +100,8 @@ class Instagram
             "code" => $code,
             "state" => $this->state
         );
-        $response = HelperFactory::request($this->client, Constants::API_TOKEN, $options, 'POST');
+		$helper = HelperFactory::getInstance();
+        $response = $helper->request($this->client, Constants::API_TOKEN, $options, 'POST');
         $this->oauthResponse = new InstagramOAuth(
             json_decode($response->getBody()->getContents())
         );

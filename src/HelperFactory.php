@@ -11,6 +11,9 @@ use Haridarshan\Instagram\Exceptions\InstagramServerException;
 
 class HelperFactory
 {
+	/** @var Singleton The reference to *Singleton* instance of this class */
+	private static $instance;
+	
     /** @var Response $response */
     protected static $response;
     
@@ -20,7 +23,25 @@ class HelperFactory
     /** @var object $content */
     protected static $content;
     
-    private function __construct()
+	/*
+     * Returns the *Singleton* instance of this class.
+     *
+     * @return Singleton The *Singleton* instance.
+     */
+    public static function getInstance()
+    {
+        if (null === static::$instance) {
+            static::$instance = new static();
+        }
+        
+        return static::$instance;
+    }
+	
+	/*
+     * Protected constructor to prevent creating a new instance of the
+     * *Singleton* via the `new` operator from outside of this class.
+     */
+    protected function __construct()
     {
         // a factory constructor should never be invoked
     }
@@ -30,7 +51,7 @@ class HelperFactory
      * @param string $uri
      * @return Client
      */
-    public static function client($uri)
+    public function client($uri)
     {
         return new Client([
             'base_uri' => $uri
@@ -46,7 +67,7 @@ class HelperFactory
      * @throws InstagramOAuthException
      * @throws InstagramException
      */
-    public static function request(Client $client, $endpoint, $options, $method = 'GET')
+    public function request(Client $client, $endpoint, $options, $method = 'GET')
     {
         try {
             return $client->request($method, $endpoint, [
@@ -76,14 +97,14 @@ class HelperFactory
      */
     protected static function extractOriginalExceptionMessage(ClientException $exception)
     {
-        self::$response = $e->getResponse();
+        self::$response = $exception->getResponse();
         self::$stream = self::$response->getBody();
         self::$content = self::$stream->getContents();
         if (empty(self::$content)) {
             throw new InstagramServerException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception
             );
         }
 		return json_decode(self::$content);
@@ -94,20 +115,20 @@ class HelperFactory
 	 * @param ClientException $exception
      * @return void
      */
-    protected static function throwException(\stdClass $object, ClientException $exception)
+    protected static function throwException(\stdClass $object, ClientException $exMessage)
     {
         $exception = static::getExceptionMessage($object);
         if (stripos($exception['error_type'], "oauth") !== false) {
             throw new InstagramOAuthException(
                 json_encode(array("Type" => $exception['error_type'], "Message" => $exception['error_message'])),
                 $exception['error_code'],
-                $e
+                $exMessage
             );
         }
         throw new InstagramException(
             json_encode(array("Type" => $exception['error_type'], "Message" => $exception['error_message'])),
             $exception['error_code'],
-            $e
+            $exMessage
         );
     }
 	
@@ -122,5 +143,15 @@ class HelperFactory
 		$message['error_message'] = isset($object->meta) ? $object->meta->error_message : $object->error_message;
 		$message['error_code'] = isset($object->meta) ? $object->meta->code : $object->code;
         return $message;
+    }
+	
+	/*
+     * Private clone method to prevent cloning of the instance of the
+     * *Singleton* instance.
+     *
+     * @return void
+     */
+    private function __clone()
+    {
     }
 }
