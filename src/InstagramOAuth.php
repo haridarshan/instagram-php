@@ -17,12 +17,11 @@ class InstagramOAuth
      */
     public function __construct(\stdClass $oauth)
     {
-        if (!empty($oauth)) {
-            $this->accessToken = $oauth->access_token;
-            $this->user = isset($oauth->user) ? $oauth->user : null;
-        } else {
+        if (empty($oauth)) {
             throw new InstagramOAuthException("Bad Request 400 empty Response", 400);
         }
+		$this->accessToken = $oauth->access_token;
+		$this->user = isset($oauth->user) ? $oauth->user : null;
     }
     
     /*

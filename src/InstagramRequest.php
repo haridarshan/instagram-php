@@ -56,11 +56,12 @@ class InstagramRequest
      */
     protected function execute()
     {
-        $authentication_method = '?access_token='.$this->params['access_token'];
-        $endpoint = Constants::API_VERSION.$this->path.(('GET' === $this->method) ? '?'.http_build_query($this->params) : $authentication_method);
+        $authMethod = '?access_token='.$this->params['access_token'];
+        $endpoint = Constants::API_VERSION.$this->path.(('GET' === $this->method) ? '?'.http_build_query($this->params) : $authMethod);
         $endpoint .= (strstr($endpoint, '?') ? '&' : '?').'sig='.static::generateSignature($this->instagram->getClientSecret(), $this->path, $this->params);
         
         $request = HelperFactory::request($this->instagram->getHttpClient(), $endpoint, $this->params, $this->method);
+				
         if ($request !== null) {
             $this->response = new InstagramResponse($request);
             $this->xRateLimitRemaining = $this->response->getHeader('X-Ratelimit-Remaining');

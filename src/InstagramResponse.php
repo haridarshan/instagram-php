@@ -39,11 +39,10 @@ class InstagramResponse
 	 */
     public function __construct(Response $response)
     {
-        if ($response instanceof Response) {
-            $this->setParams($response);
-        } else {
-            throw new InstagramResponseException('Bad Request: Response is not valid instance of GuzzleHttp\Psr7\Response', 404);
+        if (!$response instanceof Response) {
+            throw new InstagramResponseException('Bad Request: Response is not valid instance of GuzzleHttp\Psr7\Response', 404); 
         }
+		$this->setParams($response);
     }
     
     /* 

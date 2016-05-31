@@ -53,8 +53,8 @@ class HelperFactory
                 'headers' => ['Accept' => 'application/json'],
                 'body' => static::createBody($options, $method)
             ]);
-        } catch (ClientException $e) {
-            static::throwException(static::extractOriginalExceptionMessage($e), $e);
+        } catch (ClientException $exception) {
+            static::throwException(static::extractOriginalExceptionMessage($exception), $exception);
         }
     }
     
@@ -71,10 +71,10 @@ class HelperFactory
     
     /*
      * Method to extract all exceptions for Guzzle ClientException
-     * @param ClientException $e
+     * @param ClientException $exception
      * @return
      */
-    protected static function extractOriginalExceptionMessage(ClientException $e)
+    protected static function extractOriginalExceptionMessage(ClientException $exception)
     {
         self::$response = $e->getResponse();
         self::$stream = self::$response->getBody();
@@ -85,17 +85,16 @@ class HelperFactory
                 $e->getCode(),
                 $e
             );
-        } else {
-            return json_decode(self::$content);
         }
+		return json_decode(self::$content);
     }
     
     /*
      * @param \stdClass $object
-	 * @param ClientException $e
+	 * @param ClientException $exception
      * @return void
      */
-    protected static function throwException(\stdClass $object, ClientException $e)
+    protected static function throwException(\stdClass $object, ClientException $exception)
     {
         $exception = static::getExceptionMessage($object);
         if (stripos($exception['error_type'], "oauth") !== false) {
@@ -118,16 +117,10 @@ class HelperFactory
 	 */
     protected static function getExceptionMessage(\stdClass $object)
     {
-        $message = array();
-        if (isset($object->meta)) {
-            $message['error_type'] = $object->meta->error_type;
-            $message['error_message'] = $object->meta->error_message;
-            $message['error_code'] = $object->meta->code;
-        } else {
-            $message['error_type'] = $object->error_type;
-            $message['error_message'] = $object->error_message;
-            $message['error_code'] = $object->code;
-        }
+        $message = array();		
+		$message['error_type'] = isset($object->meta) ? $object->meta->error_type : $object->error_type;
+		$message['error_message'] = isset($object->meta) ? $object->meta->error_message : $object->error_message;
+		$message['error_code'] = isset($object->meta) ? $object->meta->code : $object->code;
         return $message;
     }
 }
