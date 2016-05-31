@@ -11,8 +11,8 @@ use Haridarshan\Instagram\Exceptions\InstagramServerException;
 
 class HelperFactory
 {
-	/** @var HelperFactory The reference to *HelperFactory* instance of this class */
-	private static $instance;
+    /** @var HelperFactory The reference to *HelperFactory* instance of this class */
+    private static $instance;
 	
     /** @var Response $response */
     protected static $response;
@@ -23,7 +23,7 @@ class HelperFactory
     /** @var object $content */
     protected static $content;
     
-	/*
+    /*
      * Returns the *HelperFactory* instance of this class.
      *
      * @return HelperFactory The *HelperFactory* instance.
@@ -37,7 +37,7 @@ class HelperFactory
         return self::$instance;
     }
 	
-	/*
+    /*
      * Protected constructor to prevent creating a new instance of the
      * *HelperFactory* via the `new` operator from outside of this class.
      */
@@ -107,7 +107,7 @@ class HelperFactory
                 $exception
             );
         }
-		return json_decode(self::$content);
+        return json_decode(self::$content);
     }
     
     /*
@@ -139,13 +139,13 @@ class HelperFactory
     protected static function getExceptionMessage(\stdClass $object)
     {
         $message = array();		
-		$message['error_type'] = isset($object->meta) ? $object->meta->error_type : $object->error_type;
-		$message['error_message'] = isset($object->meta) ? $object->meta->error_message : $object->error_message;
-		$message['error_code'] = isset($object->meta) ? $object->meta->code : $object->code;
+        $message['error_type'] = isset($object->meta) ? $object->meta->error_type : $object->error_type;
+        $message['error_message'] = isset($object->meta) ? $object->meta->error_message : $object->error_message;
+        $message['error_code'] = isset($object->meta) ? $object->meta->code : $object->code;
         return $message;
     }
 	
-	/*
+    /*
      * Private clone method to prevent cloning of the instance of the
      * *HelperFactory* instance.
      *
@@ -153,6 +153,6 @@ class HelperFactory
      */
     private function __clone()
     {
-		// a factory clone should never be invoked
+        // a factory clone should never be invoked
     }
 }
