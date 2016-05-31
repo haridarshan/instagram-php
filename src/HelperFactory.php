@@ -30,11 +30,11 @@ class HelperFactory
      */
     public static function getInstance()
     {
-        if (null === static::$instance) {
-            static::$instance = new static();
+        if (null === self::$instance) {
+            self::$instance = new static();
         }
         
-        return static::$instance;
+        return self::$instance;
     }
 	
 	/*
@@ -112,7 +112,7 @@ class HelperFactory
     
     /*
      * @param \stdClass $object
-	 * @param ClientException $exception
+	 * @param ClientException $exMessage
      * @return void
      */
     protected static function throwException(\stdClass $object, ClientException $exMessage)
