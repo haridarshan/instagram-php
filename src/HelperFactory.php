@@ -153,5 +153,6 @@ class HelperFactory
      */
     private function __clone()
     {
+		// a factory clone should never be invoked
     }
 }
