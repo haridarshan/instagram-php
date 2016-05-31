@@ -58,11 +58,11 @@ class Instagram
         if (!is_array($config)) {
             throw new InstagramException('Invalid Instagram Configuration data', 400);
         }
-		$this->setClientId($config['ClientId']);
-		$this->setClientSecret($config['ClientSecret']);
-		$this->setCallbackUrl($config['Callback']);
-		$this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
-		$helper = HelperFactory::getInstance();
+        $this->setClientId($config['ClientId']);
+        $this->setClientSecret($config['ClientSecret']);
+        $this->setCallbackUrl($config['Callback']);
+        $this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
+        $helper = HelperFactory::getInstance();
         $this->client = $helper->client(Constants::API_HOST);
     }
 	
@@ -77,9 +77,9 @@ class Instagram
             throw new InstagramException("Missing or Invalid Scope permission used", 400);
         }
         if (count(array_diff($parameters['scope'], $this->defaultScopes)) !== 0) {
-			throw new InstagramException("Missing or Invalid Scope permission used", 400);
+            throw new InstagramException("Missing or Invalid Scope permission used", 400);
         }
-		$this->scopes = $parameters['scope'];
+        $this->scopes = $parameters['scope'];
         $query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code&state='.$this->state;
         $query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '';
         return sprintf('%s%s?%s', Constants::API_HOST, Constants::API_AUTH, $query);
@@ -100,7 +100,7 @@ class Instagram
             "code" => $code,
             "state" => $this->state
         );
-		$helper = HelperFactory::getInstance();
+        $helper = HelperFactory::getInstance();
         $response = $helper->request($this->client, Constants::API_TOKEN, $options, 'POST');
         $this->oauthResponse = new InstagramOAuth(
             json_decode($response->getBody()->getContents())
@@ -174,8 +174,8 @@ class Instagram
         if ($this->oauthResponse instanceof InstagramOAuth) {
             return $this->oauthResponse;
         }
-		$this->oauthResponse = new InstagramOAuth(json_decode(json_encode(["access_token" => null])));
-		return $this->oauthResponse;
+        $this->oauthResponse = new InstagramOAuth(json_decode(json_encode(["access_token" => null])));
+        return $this->oauthResponse;
     }
     /*
      * @return Client
