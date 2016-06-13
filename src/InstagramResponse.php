@@ -42,7 +42,7 @@ class InstagramResponse
         if (!$response instanceof Response) {
             throw new InstagramResponseException('Bad Request: Response is not valid instance of GuzzleHttp\Psr7\Response', 404); 
         }
-		$this->setParams($response);
+        $this->setParams($response);
     }
     
     /* 
