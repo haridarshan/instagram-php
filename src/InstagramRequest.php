@@ -1,6 +1,5 @@
 <?php
 namespace Haridarshan\Instagram;
-
 use Haridarshan\Instagram\Constants;
 use Haridarshan\Instagram\Exceptions\InstagramRequestException;
 use Haridarshan\Instagram\Exceptions\InstagramResponseException;
@@ -8,7 +7,6 @@ use Haridarshan\Instagram\Exceptions\InstagramThrottleException;
 use Haridarshan\Instagram\HelperFactory;
 use Haridarshan\Instagram\Instagram;
 use Haridarshan\Instagram\InstagramResponse;
-
 class InstagramRequest
 {
     /** @var string $path */
@@ -19,7 +17,6 @@ class InstagramRequest
     
     /** @var string $method */
     private $method;
-
     /*
     * Remaining Rate Limit
     * Sandbox = 500

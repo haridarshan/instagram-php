@@ -1,6 +1,5 @@
 <?php
 namespace Haridarshan\Instagram;
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
@@ -8,7 +7,6 @@ use GuzzleHttp\Psr7\Stream;
 use Haridarshan\Instagram\Exceptions\InstagramException;
 use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
 use Haridarshan\Instagram\Exceptions\InstagramServerException;
-
 class HelperFactory
 {
     /** @var HelperFactory The reference to *HelperFactory* instance of this class */
@@ -57,7 +55,6 @@ class HelperFactory
             'base_uri' => $uri
         ]);
     }
-
     /*	
      * @param Client $client
      * @param string $endpoint
