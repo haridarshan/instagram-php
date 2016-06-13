@@ -60,10 +60,10 @@ class InstagramRequest
         $request = $helper->request($this->instagram->getHttpClient(), $endpoint, $this->params, $this->method);
 				
         if ($request === null) {
-			throw new InstagramResponseException("400 Bad Request: instanceof InstagramResponse cannot be null", 400);
+            throw new InstagramResponseException("400 Bad Request: instanceof InstagramResponse cannot be null", 400);
         }
-		$this->response = new InstagramResponse($request);
-		$this->xRateLimitRemaining = $this->response->getHeader('X-Ratelimit-Remaining');
+        $this->response = new InstagramResponse($request);
+        $this->xRateLimitRemaining = $this->response->getHeader('X-Ratelimit-Remaining');
     }
     
     /*
