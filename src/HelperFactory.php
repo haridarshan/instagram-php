@@ -152,5 +152,4 @@ class HelperFactory
     {
         // a factory clone should never be invoked
     }
-	
 }
