@@ -20,8 +20,8 @@ class InstagramOAuth
         if (empty($oauth)) {
             throw new InstagramOAuthException("Bad Request 400 empty Response", 400);
         }
-		$this->accessToken = $oauth->access_token;
-		$this->user = isset($oauth->user) ? $oauth->user : null;
+        $this->accessToken = $oauth->access_token;
+        $this->user = isset($oauth->user) ? $oauth->user : null;
     }
     
     /*
