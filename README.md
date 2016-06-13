@@ -25,7 +25,6 @@ use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
 use Haridarshan\Instagram\Exceptions\InstagramResponseException;
 use Haridarshan\Instagram\Exceptions\InstagramServerException;
 
-?>
 ```
 
 ### Authorization Code Flow
@@ -53,7 +52,6 @@ $scope = [
 $insta_url = $instagram->getLoginUrl(["scope" => $scope]);
 echo "<a href='{$insta_url}'>Login with Instagram</a>";
 
-?>
 ```
 
 ### Get Access Token
@@ -69,7 +67,7 @@ try {
 } catch (InstagramOAuthException $e) {
   echo $e->getMessage();
 }
-?>
+
 ```
 
 ### Request to Instagram APIs
@@ -103,7 +101,6 @@ $delete_comment = new InstagramRequest(
 );
 $delete_response = $delete_comment->getResponse();
 
-?>
 ```
 
 ### Common Methods 
@@ -120,5 +117,5 @@ $delete_response = $delete_comment->getResponse();
   $user_data = $user_response->getData();
   // To get MetaData part
   $user_meta_data = $user_response->getMetaData();
-?>
+
 ```
