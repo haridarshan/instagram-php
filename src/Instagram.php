@@ -1,7 +1,6 @@
 <?php
 /*
 * Instagram API class
-*
 * API Documentation: http://instagram.com/developer/
 * Class Documentation: https://github.com/haridarshan/Instagram-php
 *
