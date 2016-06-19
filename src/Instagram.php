@@ -8,7 +8,7 @@
 * @author Haridarshan Gorana
 * @since May 09, 2016
 * @copyright Haridarshan Gorana
-* @version 2.0
+* @version 2.1
 * @license: MIT
 *
 */
