@@ -4,5 +4,5 @@ engines:
     enabled: true
     # ... CONFIG CONTENT ...
     checks:
-      CleanCode%2FStaticAccess:
+      CleanCode/StaticAccess:
         enabled: false
