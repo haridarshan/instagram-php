@@ -1,8 +1,18 @@
 engines:
-  # ... CONFIG CONTENT ...
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - php
+  fixme:
+    enabled: true
   phpmd:
     enabled: true
-    # ... CONFIG CONTENT ...
     checks:
       CleanCode/StaticAccess:
         enabled: false
+ratings:
+  paths:
+  - "**.php"
+exclude_paths:
+- tests/
