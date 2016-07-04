@@ -67,9 +67,8 @@ class HelperFactory
     public function request(Client $client, $endpoint, $options, $method = 'GET')
     {
         try {
-            return $client->request($method, $endpoint, [
-                'headers' => ['Accept' => 'application/json'],
-                'body' => static::createBody($options, $method)
+			return $client->request($method, $endpoint, [
+                'form_params' => $options
             ]);
         } catch (ClientException $exception) {
             static::throwException(static::extractOriginalExceptionMessage($exception), $exception);
