@@ -1,16 +1,4 @@
 <?php
-/*
-* Instagram API class
-* API Documentation: http://instagram.com/developer/
-* Class Documentation: https://github.com/haridarshan/Instagram-php
-*
-* @author Haridarshan Gorana
-* @since May 09, 2016
-* @copyright Haridarshan Gorana
-* @version 2.1
-* @license: MIT
-*
-*/
 namespace Haridarshan\Instagram;
 
 use Haridarshan\Instagram\Constants;
@@ -18,6 +6,18 @@ use Haridarshan\Instagram\Exceptions\InstagramException;
 use Haridarshan\Instagram\HelperFactory;
 use Haridarshan\Instagram\InstagramOAuth;
 
+/**
+ * PHP Instagram API wrapper class
+ * 
+ * @library			instagram-php
+ * @license 		https://opensource.org/licenses/MIT MIT
+ * @link			http://github.com/haridarshan/instagram-php Class Documentation
+ * @link			http://instagram.com/developer/ API Documentation
+ * @author			Haridarshan Gorana 	<hari.darshan@jetsynthesys.com>
+ * @since			May 09, 2016
+ * @copyright		Haridarshan Gorana
+ * @version			2.1
+ */
 class Instagram
 {
     /** @var string */
