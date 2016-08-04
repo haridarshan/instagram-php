@@ -1,3 +1,0 @@
-
-var ApiGen = ApiGen || {};
-ApiGen.elements = [["c","Haridarshan\\Instagram\\Constants"],["c","Haridarshan\\Instagram\\Exceptions\\InstagramException"],["c","Haridarshan\\Instagram\\Exceptions\\InstagramOAuthException"],["c","Haridarshan\\Instagram\\Exceptions\\InstagramRequestException"],["c","Haridarshan\\Instagram\\Exceptions\\InstagramResponseException"],["c","Haridarshan\\Instagram\\Exceptions\\InstagramServerException"],["c","Haridarshan\\Instagram\\Exceptions\\InstagramThrottleException"],["c","Haridarshan\\Instagram\\HelperFactory"],["c","Haridarshan\\Instagram\\Instagram"],["c","Haridarshan\\Instagram\\InstagramOAuth"],["c","Haridarshan\\Instagram\\InstagramRequest"],["c","Haridarshan\\Instagram\\InstagramResponse"]];
