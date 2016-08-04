@@ -5,6 +5,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
+use Psr\Http\Message\ResponseInterface;
 use Haridarshan\Instagram\Exceptions\InstagramException;
 use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
 use Haridarshan\Instagram\Exceptions\InstagramServerException;
@@ -14,7 +15,7 @@ class HelperFactory
     /** @var HelperFactory The reference to *HelperFactory* instance of this class */
     private static $instance;
 	
-    /** @var Response $response */
+    /** @var Response|ResponseInterface $response */
     protected static $response;
     
     /** @var Stream $stream */
