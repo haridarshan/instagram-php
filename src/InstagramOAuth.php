@@ -3,6 +3,18 @@ namespace Haridarshan\Instagram;
 
 use Haridarhan\Instagram\Exceptions\InstagramOAuthException;
 
+/**
+ * Instagram Oauth class
+ * 
+ * @library			instagram-php
+ * @license 		https://opensource.org/licenses/MIT MIT
+ * @link			http://github.com/haridarshan/instagram-php Class Documentation
+ * @link			http://instagram.com/developer/ API Documentation
+ * @author			Haridarshan Gorana 	<hari.darshan@jetsynthesys.com>
+ * @since			May 09, 2016
+ * @copyright		Haridarshan Gorana
+ * @version			2.1
+ */
 class InstagramOAuth
 {
     /** @var string $accessToken */
