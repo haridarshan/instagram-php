@@ -70,7 +70,7 @@ class HelperFactory
     public function request(Client $client, $endpoint, $options, $method = 'GET')
     {
         try {
-			return $client->request($method, $endpoint, [
+            return $client->request($method, $endpoint, [
                 'form_params' => $options
             ]);
         } catch (ClientException $exception) {
