@@ -1,6 +1,18 @@
 <?php
 namespace Haridarshan\Instagram;
 
+/**
+ * Constant class
+ * 
+ * @library			instagram-php
+ * @license 		https://opensource.org/licenses/MIT MIT
+ * @link			http://github.com/haridarshan/instagram-php Class Documentation
+ * @link			http://instagram.com/developer/ API Documentation
+ * @author			Haridarshan Gorana 	<hari.darshan@jetsynthesys.com>
+ * @since			May 09, 2016
+ * @copyright		Haridarshan Gorana
+ * @version			2.1
+ */
 class Constants
 {
     /** Library Version */
