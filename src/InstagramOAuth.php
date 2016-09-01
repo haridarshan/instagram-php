@@ -61,7 +61,7 @@ class InstagramOAuth
      */
     public function isAccessTokenSet()
     {
-        return isset($this->accessToken) ? true : false;
+        return isset($this->accessToken);
     }
     
     /*
