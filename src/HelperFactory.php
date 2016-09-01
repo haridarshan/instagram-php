@@ -99,7 +99,7 @@ class HelperFactory
         self::$response = $exception->getResponse();
         self::$stream = self::$response->getBody();
         self::$content = self::$stream->getContents();
-        if (empty(self::$content)) {
+        if (!self::$content) {
             throw new InstagramServerException(
                 $exception->getMessage(),
                 $exception->getCode(),
