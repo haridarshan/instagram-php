@@ -85,9 +85,9 @@ class HelperFactory
     
     /** 
      * Factory Client method to create \GuzzleHttp\Client object
-	 * 
+     * 
      * @param string $uri
-	 * 
+     * 
      * @return Client
      */
     public function client($uri)
@@ -98,15 +98,15 @@ class HelperFactory
     }
 	
     /**
-	 * Sends request to Instagram Api Endpoints
-	 * 
+     * Sends request to Instagram Api Endpoints
+     * 
      * @param Client $client
      * @param string $endpoint
      * @param array|string $options
      * @param string $method
-	 * 
+     * 
      * @return Response
-	 * 
+     * 
      * @throws InstagramOAuthException|InstagramException
      */
     public function request(Client $client, $endpoint, $options, $method = 'GET')
@@ -122,10 +122,10 @@ class HelperFactory
     
     /**
      * Create body for Guzzle client request
-	 * 
+     * 
      * @param array|null|string $options
      * @param string $method GET|POST
-	 * 
+     * 
      * @return string|mixed
      */
     protected static function createBody($options, $method)
@@ -158,13 +158,13 @@ class HelperFactory
     }
     
     /** 
-	 * Throw required Exception 
-	 * 
+     * Throw required Exception 
+     * 
      * @param \stdClass $object
-	 * @param ClientException $exMessage
-	 * 
-	 * @return void
-	 *
+     * @param ClientException $exMessage
+     * 
+     * @return void
+     *
      * @throws InstagramOAuthException|InstagramException
      */
     protected static function throwException(\stdClass $object, ClientException $exMessage)
@@ -185,12 +185,12 @@ class HelperFactory
     }
 	
     /**
-	 * Creates Exception Message
-	 * 
-	 * @param \stdClass $object
-	 * 
-	 * @return array
-	 */
+     * Creates Exception Message
+     * 
+     * @param \stdClass $object
+     * 
+     * @return array
+     */
     protected static function createExceptionMessage(\stdClass $object)
     {
         $message = array();		
@@ -211,7 +211,7 @@ class HelperFactory
         // a factory clone should never be invoked
     }
 	
-	/**
+    /**
      * Private unserialize method to prevent unserializing of the *HelperFactory	*
      * instance.
      *

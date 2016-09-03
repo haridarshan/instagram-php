@@ -72,7 +72,7 @@ class InstagramRequest
     
     /**
      * Create the request and execute it to get the response
-	 * 
+     * 
      * @param Instagram $instagram
      * @param string $path
      * @param array $params
@@ -88,12 +88,12 @@ class InstagramRequest
     
     /**
      * Execute the Instagram Request
-	 * 
+     * 
      * @param void
-	 * 
+     * 
      * @return InstagramResponse
-	 * 
-	 * @throws InstagramResponseException
+     * 
+     * @throws InstagramResponseException
      */
     protected function execute()
     {
@@ -112,7 +112,7 @@ class InstagramRequest
     
     /**
      * Check Access Token is present. If not throw InstagramRequestException
-	 * 
+     * 
      * @throws InstagramRequestException
      */
     protected function isAccessTokenPresent()
@@ -124,7 +124,7 @@ class InstagramRequest
     
     /**
      * Get Response
-	 * 
+     * 
      * @return InstagramResponse
      */
     public function getResponse()
@@ -143,7 +143,7 @@ class InstagramRequest
     
     /**
      * Check whether api rate limit is reached or not
-	 * 
+     * 
      * @throws InstagramThrottleException
      */
     private function isRateLimitReached()
@@ -155,8 +155,8 @@ class InstagramRequest
     
     /**
      * Secure API Request by using endpoint, paramters and API secret
-	 * 
-	 * @see https://www.instagram.com/developer/secure-api-requests/
+     * 
+     * @see https://www.instagram.com/developer/secure-api-requests/
      *
      * @param InstagramApp $app
      * @param string $endpoint
@@ -175,8 +175,8 @@ class InstagramRequest
     }
     
     /**
-	 * Get Api Rate Limit
-	 * 
+     * Get Api Rate Limit
+     * 
      * @return int
      */
     public function getRateLimit()

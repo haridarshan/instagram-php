@@ -41,7 +41,7 @@ use Haridarshan\Instagram\Exceptions\InstagramException;
  */
 class InstagramApp
 {
-	/**
+    /**
      * @var string Instagram App ID.
      */
     protected $id;
@@ -51,7 +51,7 @@ class InstagramApp
      */
     protected $secret;
 	
-	/**
+    /**
      * @param string $id
      * @param string $secret
      *
@@ -63,7 +63,7 @@ class InstagramApp
             throw new InstagramException('The "client_id" must be formatted as a string.');
         }
 		
-		if (!is_string($secret)) {
+        if (!is_string($secret)) {
             throw new InstagramException('The "client_secret" must be formatted as a string.');
         }
 		
@@ -71,7 +71,7 @@ class InstagramApp
         $this->secret = $secret;
     }
 	
-	/**
+    /**
      * Returns the app ID.
      *
      * @return string

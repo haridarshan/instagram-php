@@ -49,10 +49,10 @@ class InstagramOAuth
     protected $user;
     
     /** 
-	 * InstagramOAuth Entity 
-	 * 
+     * InstagramOAuth Entity 
+     * 
      * @param stdClass $oauth
-	 * 
+     * 
      * @throws InstagramOAuthException
      */
     public function __construct(stdClass $oauth)
@@ -67,7 +67,7 @@ class InstagramOAuth
     
     /**
      * Get Access Token
-	 * 
+     * 
      * @return string
      */
     public function getAccessToken()
@@ -77,9 +77,9 @@ class InstagramOAuth
     
     /**
      * Set Access Token
-	 * 
+     * 
      * @param string $token
-	 * 
+     * 
      * @return void
      */
     public function setAccessToken($token)
@@ -89,7 +89,7 @@ class InstagramOAuth
     
     /**
      * If AccessToken is set return true else false
-	 * 
+     * 
      * @return bool
      */
     public function isAccessTokenSet()
@@ -99,7 +99,7 @@ class InstagramOAuth
     
     /**
      * Get User Info
-	 * 
+     * 
      * @return object
      */
     public function getUserInfo()
