@@ -15,13 +15,7 @@ class InstagramTest extends \PHPUnit_Framework_TestCase {
 		
 		$this->instagram = new Instagram($config);
 	}
-	
-	public function testBuildClient(){
-		$this->assertObjectHasAttribute('clientId', $this->instagram);		
-		$this->assertObjectHasAttribute('clientSecret', $this->instagram);		
-		$this->assertObjectHasAttribute('callbackUrl', $this->instagram);
-	}
-	
+		
 	public function testUrl(){
 		$scope = array(
 			"basic"
