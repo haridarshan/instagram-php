@@ -8,9 +8,9 @@ class InstagramTest extends \PHPUnit_Framework_TestCase {
 	
 	protected function setup() {
 		$config = array(
-			'ClientId' => CLIENT_ID,
-			'ClientSecret' => CLIENT_SECRET,
-			'Callback' => CLIENT_SECRET
+			'ClientId' => "{CLIENT_ID}",
+			'ClientSecret' => "{CLIENT_SECRET}",
+			'Callback' => "{CLIENT_SECRET}"
 		);
 		
 		$this->instagram = new Instagram($config);

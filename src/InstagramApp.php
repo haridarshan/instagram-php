@@ -59,6 +59,8 @@ class InstagramApp
      */
     public function __construct($id, $secret)
     {
+		printData(gettype($id));
+		exit();
         if (!is_string($id)) {
             throw new InstagramException('The "client_id" must be formatted as a string.');
         }
