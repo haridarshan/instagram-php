@@ -1,5 +1,5 @@
 approve_by_comment: true
-approve_regex: ^Approved
+approve_regex: '^:\+1:'
 reject_regex: ^Rejected
 reset_on_push: false
 reviewers:
