@@ -1,40 +1,68 @@
 <?php
+/**
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2016 Haridarshan Gorana
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
 namespace Haridarshan\Instagram;
 
+use stdClass;
 use GuzzleHttp\Psr7\Response;
 use Haridarshan\Instagram\Exceptions\InstagramResponseException;
 
 class InstagramResponse
 {
     /** @var int $status_code */
-    private $statusCode;
+    protected $statusCode;
 	
     /** @var string $protocol */
-    private $protocol = '1.1';
+    protected $protocol = '1.1';
 	
     /** @var array $headers */
-    private $headers = [];
+    protected $headers = [];
 	
     /** @var bool */
-    private $isPagination = false;
+    protected $isPagination = false;
 	
     /** @var object */
-    private $pagination;
+    protected $pagination;
     
     /** @var bool */
-    private $isMetaData = false;
+    protected $isMetaData = false;
 	
     /** @var object */
-    private $metaData;
+    protected $metaData;
 	
     /** @var object */
-    private $data;
+    protected $data;
 	
     /** @var object $body */
-    private $body;
+    protected $body;
 	
-    /*
+    /**
+	 * InstagramResponse Entity
+	 * 
 	 * @param Response $response
+	 * 
 	 * @throws InstagramResponseException
 	 */
     public function __construct(Response $response)
@@ -45,9 +73,11 @@ class InstagramResponse
         $this->setParams($response);
     }
     
-    /* 
+    /**
 	 * Set Values to the class members
+	 * 
 	 * @param Response $response
+	 * 
 	 * @return void
 	 */
     private function setParams(Response $response)
@@ -59,6 +89,11 @@ class InstagramResponse
         $this->extractBodyParts();
     }
 	
+	/**
+	 * Extract Body Parts from the response
+	 * 
+	 * @return void
+	 */
     private function extractBodyParts()
     {
         if (isset($this->body->pagination)) {
@@ -74,8 +109,9 @@ class InstagramResponse
         $this->data = $this->body->data;	
     }
     
-    /*
+    /**
 	 * Get response
+	 * 
 	 * @return object|string 
 	 */
     public function getBody()
@@ -83,8 +119,9 @@ class InstagramResponse
         return $this->body;
     }
     
-    /*
+    /** 
 	 * Get Status Code
+	 * 
 	 * @return int
 	 */
     public function getStatusCode()
@@ -92,9 +129,11 @@ class InstagramResponse
         return $this->statusCode;
     }
     
-    /*
+    /**
 	 * Get specific header
+	 * 
 	 * @param string $header
+	 * 
 	 * @retrun string 
 	 */
     public function getHeader($header)
@@ -102,8 +141,9 @@ class InstagramResponse
         return isset($this->headers[$header]) ? $this->headers[$header] : [];
     }
 	
-    /*
+    /**
 	 * Get all headers
+	 * 
 	 * @retrun array 
 	 */
     public function getHeaders()
@@ -111,8 +151,9 @@ class InstagramResponse
         return $this->headers;
     }
 	
-    /*
+    /**
 	 * Get data from body
+	 * 
 	 * @return object
 	 */
     public function getData()
@@ -120,8 +161,9 @@ class InstagramResponse
         return $this->data;
     }
 	
-    /*
+    /**
 	 * Get Meta data
+	 * 
 	 * @return object
 	 */
     public function getMetaData()
@@ -129,8 +171,9 @@ class InstagramResponse
         return $this->metaData;
     }
 	
-    /*
+    /**
 	 * Get Meta data
+	 * 
 	 * @return object
 	 */
     public function getPagination()
@@ -138,8 +181,9 @@ class InstagramResponse
         return $this->pagination;
     }
 	
-    /*
+    /**
 	 * Is Meta Data Present
+	 * 
 	 * @return bool
 	 */
     public function isMetaDataSet()
@@ -147,8 +191,9 @@ class InstagramResponse
         return $this->isMetaData;
     }
 	
-    /*
+    /**
 	 * Is Pagination present
+	 * 
 	 * @return bool
 	 */
     public function isPaginationSet()
@@ -156,8 +201,9 @@ class InstagramResponse
         return $this->isPagination;
     }
 	
-    /*
+    /**
 	 * Get Protocol version
+	 * 
 	 * @return string
 	 */
     public function getProtocol()

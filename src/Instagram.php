@@ -1,6 +1,32 @@
 <?php
+/**
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2016 Haridarshan Gorana
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
 namespace Haridarshan\Instagram;
 
+use stdClass;
+use InvalidArgumentException;
 use Haridarshan\Instagram\Constants;
 use Haridarshan\Instagram\Exceptions\InstagramException;
 use Haridarshan\Instagram\HelperFactory;
@@ -16,59 +42,88 @@ use Haridarshan\Instagram\InstagramOAuth;
  * @author			Haridarshan Gorana 	<hari.darshan@jetsynthesys.com>
  * @since			May 09, 2016
  * @copyright		Haridarshan Gorana
- * @version			2.1
+ * @version			2.2.2
  */
 class Instagram
 {
-    /** @var string */
-    private $clientId;
+    /** @var InstagramApp */
+    protected $app;
 	
     /** @var string */
-    private $clientSecret;
-	
-    /** @var string */
-    private $callbackUrl;
+    protected $callbackUrl;
     
-    /** @var array<string> */
-    private $defaultScopes = array("basic", "public_content", "follower_list", "comments", "relationships", "likes");
+    /** @var array */
+    protected $defaultScopes = array("basic", "public_content", "follower_list", "comments", "relationships", "likes");
 	
-    /** @var array<string> */
-    private $scopes = array();
+    /** @var array */
+    protected $scopes = array();
 	
-    /*
-    * Random string indicating the state to prevent spoofing
-    * @var string
-    */
-    private $state;
+    /**
+     * Random string indicating the state to prevent spoofing
+     * @var string
+     */
+    protected $state;
 		
     /** @var \GuzzleHttp\Client $client */
     protected $client;
 	
-    /** @var object $oauthResponse */
-    private $oauthResponse;
+    /** @var InstagramOAuth $oauthResponse */
+    protected $oauthResponse;
 	
-    /*
+    /**
      * Default Constructor
      * Instagram Configuration Data
-     * @param array|object|string $config
+	 *
+     * @param array $config
+	 *
+	 * @throws InstagramException|InvalidArgumentException
+	 * 
+	 * @todo validate callback url
      */
-    public function __construct($config)
+    public function __construct(array $config = [])
     {
         if (!is_array($config)) {
-            throw new InstagramException('Invalid Instagram Configuration data', 400);
+            throw new InstagramException('Invalid Instagram Configuration data');
         }
-        $this->setClientId($config['ClientId']);
-        $this->setClientSecret($config['ClientSecret']);
+		
+		if (!$config['ClientId']) {
+            throw new InstagramException('Missing "ClientId" key not supplied in config');
+        }
+		
+		if (!$config['ClientSecret']) {
+            throw new InstagramException('Missing "ClientSecret" key not supplied in config');
+        }
+		
+		if (!$config['Callback']) {
+            throw new InstagramException('Missing "Callback" key not supplied in config');
+        }
+		
+		$this->app = new InstagramApp($config['ClientId'], $config['ClientSecret']);	
+		
         $this->setCallbackUrl($config['Callback']);
         $this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
-        $helper = HelperFactory::getInstance();
-        $this->client = $helper->client(Constants::API_HOST);
+        
+        $this->client = HelperFactory::getInstance()->client(Constants::API_HOST);
     }
 	
-    /*
+	/**
+     * Returns InstagramApp entity.
+     *
+     * @return InstagramApp
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
+	
+    /**
      * Make URLs for user browser navigation
+	 *
      * @param array  $parameters
+	 *
      * @return string
+	 *
+	 * @throws InstagramException
      */
     public function getLoginUrl(array $parameters)
     {
@@ -78,78 +133,51 @@ class Instagram
         if (count(array_diff($parameters['scope'], $this->defaultScopes)) !== 0) {
             throw new InstagramException("Missing or Invalid Scope permission used", 400);
         }
+		
         $this->scopes = $parameters['scope'];
-        $query = 'client_id='.$this->getClientId().'&redirect_uri='.urlencode($this->getCallbackUrl()).'&response_type=code&state='.$this->state;
-        $query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $parameters['scope']))) : '';
-        return sprintf('%s%s?%s', Constants::API_HOST, Constants::API_AUTH, $query);
+		
+		$loginUrl = new LoginUrl(
+			$this->getApp(),
+			$this->getCallbackUrl(),
+			$this->getState(),
+			$this->scopes
+		);
+		
+		return $loginUrl->loginUrl();
     }
 	
-    /*
+    /**
      * Get the Oauth Access Token of a user from callback code
+	 *
      * @param string $code - Oauth2 Code returned with callback url after successfull login
+	 *
      * @return InstagramOAuth
      */
     public function oauth($code)
     {
         $options = array(
             "grant_type" => "authorization_code",
-            "client_id" => $this->getClientId(),
-            "client_secret" => $this->getClientSecret(),
+            "client_id" => $this->app->getId(),
+            "client_secret" => $this->app->getSecret(),
             "redirect_uri" => $this->getCallbackUrl(),
             "code" => $code,
             "state" => $this->state
         );
-				
-        $helper = HelperFactory::getInstance();
-        $response = $helper->request($this->client, Constants::API_TOKEN, $options, 'POST');
+		
+		$response = HelperFactory::getInstance()->request($this->client, Constants::API_TOKEN, $options, 'POST');
 		
         $this->oauthResponse = new InstagramOAuth(
-            json_decode($response->getBody()->getContents())
-        );
+			json_decode($response->getBody()->getContents())
+		);
+		
         return $this->oauthResponse;
     }
-   
-    /*
-     * Set Client Id
-     * @param string $clientId
-     * @return void
-     */
-    public function setClientId($clientId)
-    {
-        $this->clientId = $clientId;
-    }
 	
-    /*
-     * Get Client Id
-     * @return string
-     */
-    public function getClientId()
-    {
-        return $this->clientId;
-    }
-	
-    /*
-     * Set Client Secret
-     * @param string $secret
-     * @return void
-     */
-    public function setClientSecret($secret)
-    {
-        $this->clientSecret = $secret;
-    }
-	
-    /*
-     * Getter: Client Id
-     * @return string
-     */
-    public function getClientSecret()
-    {
-        return $this->clientSecret;
-    }
-	
-    /*
+    /**
      * Setter: Callback Url
+	 *
      * @param string $url
+	 *
      * @return void
      */
     public function setCallbackUrl($url)
@@ -157,8 +185,9 @@ class Instagram
         $this->callbackUrl = $url;
     }
 	
-    /*
+    /**
      * Getter: Callback Url
+	 *
      * @return string
      */
     public function getCallbackUrl()
@@ -166,8 +195,9 @@ class Instagram
         return $this->callbackUrl;
     }
 	
-    /*
+    /**
      * Get InstagramOAuth
+	 *
      * @return InstagramOAuth
      */
     public function getOAuth()
@@ -175,10 +205,17 @@ class Instagram
         if ($this->oauthResponse instanceof InstagramOAuth) {
             return $this->oauthResponse;
         }
-        $this->oauthResponse = new InstagramOAuth(json_decode(json_encode(["access_token" => null])));
+		
+		$accessToken = new stdClass;
+		$accessToken->access_token = null;
+		
+        $this->oauthResponse = new InstagramOAuth($accessToken);
         return $this->oauthResponse;
     }
-    /*
+	
+    /**
+	 * Get Http Client
+	 *
      * @return Client
      */
     public function getHttpClient()
@@ -186,9 +223,11 @@ class Instagram
         return $this->client;
     }
 	
-    /*
-     * Setter: User Access Token
+    /**
+     * Set User Access Token
+	 *
      * @param string $token
+	 *
      * @return void
      */
     public function setAccessToken($token)
@@ -197,22 +236,24 @@ class Instagram
             $this->oauthResponse = new InstagramOAuth(json_decode(json_encode(["access_token" => $token])));
         }
     }
-
-    /*
-     * Get a string containing the version of the library.
-     * @return string
-     */
-    public function getLibraryVersion()
-    {
-        return Constants::VERSION;
-    }
 	
-    /*
+    /**
      * Get state value
+	 *
      * @return string|mixed
      */
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * Get a string containing the version of the library.
+	 *
+     * @return string
+     */
+    public function getLibraryVersion()
+    {
+        return Constants::VERSION;
     }
 }

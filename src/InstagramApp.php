@@ -25,85 +25,69 @@
  */
 namespace Haridarshan\Instagram;
 
-use stdClass;
-use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
+use Haridarshan\Instagram\Exceptions\InstagramException;
 
 /**
- * Instagram Oauth class
+ * InstagramApp class
  * 
  * @library			instagram-php
  * @license 		https://opensource.org/licenses/MIT MIT
  * @link			http://github.com/haridarshan/instagram-php Class Documentation
  * @link			http://instagram.com/developer/ API Documentation
  * @author			Haridarshan Gorana 	<hari.darshan@jetsynthesys.com>
- * @since			May 09, 2016
+ * @since			September 03, 2016
  * @copyright		Haridarshan Gorana
  * @version			2.2.2
  */
-class InstagramOAuth
+class InstagramApp
 {
-    /** @var string $accessToken */
-    protected $accessToken;
-    
-    /** @var object $user */
-    protected $user;
-    
-    /** 
-	 * InstagramOAuth Entity 
-	 * 
-     * @param stdClass $oauth
-	 * 
-     * @throws InstagramOAuthException
+	/**
+     * @var string Instagram App ID.
      */
-    public function __construct(stdClass $oauth)
+    protected $id;
+
+    /**
+     * @var string Instagram App Secret.
+     */
+    protected $secret;
+	
+	/**
+     * @param string $id
+     * @param string $secret
+     *
+     * @throws InstagramException
+     */
+    public function __construct($id, $secret)
     {
-        if (empty($oauth)) {
-            throw new InstagramOAuthException("Bad Request 400 empty Response", 400);
+        if (!is_string($id)) {
+            throw new InstagramException('The "client_id" must be formatted as a string.');
         }
 		
-        $this->accessToken = $oauth->access_token;
-        $this->user = isset($oauth->user) ? $oauth->user : null;
+		if (!is_string($secret)) {
+            throw new InstagramException('The "client_secret" must be formatted as a string.');
+        }
+		
+        $this->id = $id;
+        $this->secret = $secret;
     }
-    
-    /**
-     * Get Access Token
-	 * 
+	
+	/**
+     * Returns the app ID.
+     *
      * @return string
      */
-    public function getAccessToken()
+    public function getId()
     {
-        return $this->accessToken;
+        return $this->id;
     }
-    
+
     /**
-     * Set Access Token
-	 * 
-     * @param string $token
-	 * 
-     * @return void
+     * Returns the app secret.
+     *
+     * @return string
      */
-    public function setAccessToken($token)
+    public function getSecret()
     {
-        $this->accessToken = $token;
-    }
-    
-    /**
-     * If AccessToken is set return true else false
-	 * 
-     * @return bool
-     */
-    public function isAccessTokenSet()
-    {
-        return isset($this->accessToken);
-    }
-    
-    /**
-     * Get User Info
-	 * 
-     * @return object
-     */
-    public function getUserInfo()
-    {
-        return $this->user;
+        return $this->secret;
     }
 }

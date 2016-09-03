@@ -25,85 +25,57 @@
  */
 namespace Haridarshan\Instagram;
 
-use stdClass;
-use Haridarshan\Instagram\Exceptions\InstagramOAuthException;
-
 /**
- * Instagram Oauth class
+ * LoginUrl class
  * 
  * @library			instagram-php
  * @license 		https://opensource.org/licenses/MIT MIT
  * @link			http://github.com/haridarshan/instagram-php Class Documentation
  * @link			http://instagram.com/developer/ API Documentation
  * @author			Haridarshan Gorana 	<hari.darshan@jetsynthesys.com>
- * @since			May 09, 2016
+ * @since			September 03, 2016
  * @copyright		Haridarshan Gorana
  * @version			2.2.2
  */
-class InstagramOAuth
+class LoginUrl
 {
-    /** @var string $accessToken */
-    protected $accessToken;
-    
-    /** @var object $user */
-    protected $user;
-    
-    /** 
-	 * InstagramOAuth Entity 
+	/** @var InstagramApp */
+	protected $app;
+	
+	/** @var string */
+	protected $callback;
+	
+	/** @var string */
+	protected $state; 
+	
+	/** @var array */
+	protected $scopes;
+	
+	/**
+     * LoginUrl constructor
 	 * 
-     * @param stdClass $oauth
-	 * 
-     * @throws InstagramOAuthException
+     * @param InstagramApp $app
+     * @param string $callback
+     * @param string $state
+     * @param array $scopes
      */
-    public function __construct(stdClass $oauth)
-    {
-        if (empty($oauth)) {
-            throw new InstagramOAuthException("Bad Request 400 empty Response", 400);
-        }
-		
-        $this->accessToken = $oauth->access_token;
-        $this->user = isset($oauth->user) ? $oauth->user : null;
-    }
-    
-    /**
-     * Get Access Token
+	public function __construct(InstagramApp $app, $callback, $state, $scopes)
+	{
+		$this->app = $app;	
+		$this->callback = $callback;	
+		$this->state = $state;	
+		$this->scopes = $scopes;	
+	}
+	
+	/**
+     * Creates login url
 	 * 
-     * @return string
+	 * @return string
      */
-    public function getAccessToken()
-    {
-        return $this->accessToken;
-    }
-    
-    /**
-     * Set Access Token
-	 * 
-     * @param string $token
-	 * 
-     * @return void
-     */
-    public function setAccessToken($token)
-    {
-        $this->accessToken = $token;
-    }
-    
-    /**
-     * If AccessToken is set return true else false
-	 * 
-     * @return bool
-     */
-    public function isAccessTokenSet()
-    {
-        return isset($this->accessToken);
-    }
-    
-    /**
-     * Get User Info
-	 * 
-     * @return object
-     */
-    public function getUserInfo()
-    {
-        return $this->user;
-    }
+	public function loginUrl()
+	{
+		$query = 'client_id='.$this->app->getId().'&redirect_uri='.urlencode($this->callback).'&response_type=code&state='.$this->state;
+        $query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $this->scopes))) : '';
+        return sprintf('%s%s?%s', Constants::API_HOST, Constants::API_AUTH, $query);
+	}
 }
