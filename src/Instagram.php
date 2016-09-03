@@ -73,10 +73,10 @@ class Instagram
     /**
      * Default Constructor
      * Instagram Configuration Data
-	 *
+     *
      * @param array $config
-	 *
-	 * @throws InstagramException|InvalidArgumentException
+     *
+     * @throws InstagramException|InvalidArgumentException
      */
     public function __construct(array $config = [])
     {
@@ -84,7 +84,7 @@ class Instagram
             throw new InstagramException('Invalid Instagram Configuration data');
         }
 		
-		$this->app = new InstagramApp($config['ClientId'], $config['ClientSecret']);	
+        $this->app = new InstagramApp($config['ClientId'], $config['ClientSecret']);	
 		
         $this->setCallbackUrl($config['Callback']);
         $this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
@@ -92,7 +92,7 @@ class Instagram
         $this->client = HelperFactory::getInstance()->client(Constants::API_HOST);
     }
 	
-	/**
+    /**
      * Returns InstagramApp entity.
      *
      * @return InstagramApp
@@ -104,12 +104,12 @@ class Instagram
 	
     /**
      * Make URLs for user browser navigation
-	 *
+     *
      * @param array  $parameters
-	 *
+     *
      * @return string
-	 *
-	 * @throws InstagramException
+     *
+     * @throws InstagramException
      */
     public function getLoginUrl(array $parameters)
     {
@@ -122,21 +122,21 @@ class Instagram
 		
         $this->scopes = $parameters['scope'];
 		
-		$loginUrl = new LoginUrl(
-			$this->getApp(),
-			$this->getCallbackUrl(),
-			$this->getState(),
-			$this->scopes
-		);
+        $loginUrl = new LoginUrl(
+            $this->getApp(),
+            $this->getCallbackUrl(),
+            $this->getState(),
+            $this->scopes
+        );
 		
-		return $loginUrl->loginUrl();
+        return $loginUrl->loginUrl();
     }
 	
     /**
      * Get the Oauth Access Token of a user from callback code
-	 *
+     *
      * @param string $code - Oauth2 Code returned with callback url after successfull login
-	 *
+     *
      * @return InstagramOAuth
      */
     public function oauth($code)
@@ -150,20 +150,20 @@ class Instagram
             "state" => $this->state
         );
 		
-		$response = HelperFactory::getInstance()->request($this->client, Constants::API_TOKEN, $options, 'POST');
+        $response = HelperFactory::getInstance()->request($this->client, Constants::API_TOKEN, $options, 'POST');
 		
         $this->oauthResponse = new InstagramOAuth(
-			json_decode($response->getBody()->getContents())
-		);
+            json_decode($response->getBody()->getContents())
+        );
 		
         return $this->oauthResponse;
     }
 	
     /**
      * Setter: Callback Url
-	 *
+     *
      * @param string $url
-	 *
+     *
      * @return void
      */
     public function setCallbackUrl($url)
@@ -173,7 +173,7 @@ class Instagram
 	
     /**
      * Getter: Callback Url
-	 *
+     *
      * @return string
      */
     public function getCallbackUrl()
@@ -183,7 +183,7 @@ class Instagram
 	
     /**
      * Get InstagramOAuth
-	 *
+     *
      * @return InstagramOAuth
      */
     public function getOAuth()
@@ -192,16 +192,16 @@ class Instagram
             return $this->oauthResponse;
         }
 		
-		$accessToken = new stdClass;
-		$accessToken->access_token = null;
+        $accessToken = new stdClass;
+        $accessToken->access_token = null;
 		
         $this->oauthResponse = new InstagramOAuth($accessToken);
         return $this->oauthResponse;
     }
 	
     /**
-	 * Get Http Client
-	 *
+     * Get Http Client
+     *
      * @return Client
      */
     public function getHttpClient()
@@ -211,9 +211,9 @@ class Instagram
 	
     /**
      * Set User Access Token
-	 *
+     *
      * @param string $token
-	 *
+     *
      * @return void
      */
     public function setAccessToken($token)
@@ -225,7 +225,7 @@ class Instagram
 	
     /**
      * Get state value
-	 *
+     *
      * @return string|mixed
      */
     public function getState()
@@ -235,7 +235,7 @@ class Instagram
 
     /**
      * Get a string containing the version of the library.
-	 *
+     *
      * @return string
      */
     public function getLibraryVersion()
