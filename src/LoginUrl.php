@@ -39,43 +39,43 @@ namespace Haridarshan\Instagram;
  */
 class LoginUrl
 {
-	/** @var InstagramApp */
-	protected $app;
+    /** @var InstagramApp */
+    protected $app;
 	
-	/** @var string */
-	protected $callback;
+    /** @var string */
+    protected $callback;
 	
-	/** @var string */
-	protected $state; 
+    /** @var string */
+    protected $state; 
 	
-	/** @var array */
-	protected $scopes;
+    /** @var array */
+    protected $scopes;
 	
-	/**
+    /**
      * LoginUrl constructor
-	 * 
+     * 
      * @param InstagramApp $app
      * @param string $callback
      * @param string $state
      * @param array $scopes
      */
-	public function __construct(InstagramApp $app, $callback, $state, $scopes)
-	{
-		$this->app = $app;	
-		$this->callback = $callback;	
-		$this->state = $state;	
-		$this->scopes = $scopes;	
-	}
+    public function __construct(InstagramApp $app, $callback, $state, $scopes)
+    {
+        $this->app = $app;	
+        $this->callback = $callback;	
+        $this->state = $state;	
+        $this->scopes = $scopes;	
+    }
 	
-	/**
+    /**
      * Creates login url
-	 * 
-	 * @return string
+     * 
+     * @return string
      */
-	public function loginUrl()
-	{
-		$query = 'client_id='.$this->app->getId().'&redirect_uri='.urlencode($this->callback).'&response_type=code&state='.$this->state;
+    public function loginUrl()
+    {
+        $query = 'client_id='.$this->app->getId().'&redirect_uri='.urlencode($this->callback).'&response_type=code&state='.$this->state;
         $query .= isset($this->scopes) ? '&scope='.urlencode(str_replace(",", " ", implode(",", $this->scopes))) : '';
         return sprintf('%s%s?%s', Constants::API_HOST, Constants::API_AUTH, $query);
-	}
+    }
 }

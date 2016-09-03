@@ -58,12 +58,12 @@ class InstagramResponse
     protected $body;
 	
     /**
-	 * InstagramResponse Entity
-	 * 
-	 * @param Response $response
-	 * 
-	 * @throws InstagramResponseException
-	 */
+     * InstagramResponse Entity
+     * 
+     * @param Response $response
+     * 
+     * @throws InstagramResponseException
+     */
     public function __construct(Response $response)
     {
         if (!$response instanceof Response) {
@@ -73,12 +73,12 @@ class InstagramResponse
     }
     
     /**
-	 * Set Values to the class members
-	 * 
-	 * @param Response $response
-	 * 
-	 * @return void
-	 */
+     * Set Values to the class members
+     * 
+     * @param Response $response
+     * 
+     * @return void
+     */
     private function setParams(Response $response)
     {
         $this->protocol = $response->getProtocolVersion();
@@ -88,11 +88,11 @@ class InstagramResponse
         $this->extractBodyParts();
     }
 	
-	/**
-	 * Extract Body Parts from the response
-	 * 
-	 * @return void
-	 */
+    /**
+     * Extract Body Parts from the response
+     * 
+     * @return void
+     */
     private function extractBodyParts()
     {
         if (isset($this->body->pagination)) {
@@ -109,102 +109,102 @@ class InstagramResponse
     }
     
     /**
-	 * Get response
-	 * 
-	 * @return object|string 
-	 */
+     * Get response
+     * 
+     * @return object|string 
+     */
     public function getBody()
     {
         return $this->body;
     }
     
     /** 
-	 * Get Status Code
-	 * 
-	 * @return int
-	 */
+     * Get Status Code
+     * 
+     * @return int
+     */
     public function getStatusCode()
     {
         return $this->statusCode;
     }
     
     /**
-	 * Get specific header
-	 * 
-	 * @param string $header
-	 * 
-	 * @retrun string 
-	 */
+     * Get specific header
+     * 
+     * @param string $header
+     * 
+     * @retrun string 
+     */
     public function getHeader($header)
     {
         return isset($this->headers[$header]) ? $this->headers[$header] : [];
     }
 	
     /**
-	 * Get all headers
-	 * 
-	 * @retrun array 
-	 */
+     * Get all headers
+     * 
+     * @retrun array 
+     */
     public function getHeaders()
     {
         return $this->headers;
     }
 	
     /**
-	 * Get data from body
-	 * 
-	 * @return object
-	 */
+     * Get data from body
+     * 
+     * @return object
+     */
     public function getData()
     {
         return $this->data;
     }
 	
     /**
-	 * Get Meta data
-	 * 
-	 * @return object
-	 */
+     * Get Meta data
+     * 
+     * @return object
+     */
     public function getMetaData()
     {
         return $this->metaData;
     }
 	
     /**
-	 * Get Meta data
-	 * 
-	 * @return object
-	 */
+     * Get Meta data
+     * 
+     * @return object
+     */
     public function getPagination()
     {
         return $this->pagination;
     }
 	
     /**
-	 * Is Meta Data Present
-	 * 
-	 * @return bool
-	 */
+     * Is Meta Data Present
+     * 
+     * @return bool
+     */
     public function isMetaDataSet()
     {
         return $this->isMetaData;
     }
 	
     /**
-	 * Is Pagination present
-	 * 
-	 * @return bool
-	 */
+     * Is Pagination present
+     * 
+     * @return bool
+     */
     public function isPaginationSet()
     {
         return $this->isPagination;
     }
 	
     /**
-	 * Get Protocol version
-	 * 
-	 * @return string
-	 */
+     * Get Protocol version
+     * 
+     * @return string
+     */
     public function getProtocol()
     {
         return $this->protocol;
