@@ -86,14 +86,6 @@ class Instagram
             throw new InstagramException('Invalid Instagram Configuration data');
         }
 		
-		if (!$config['ClientId']) {
-            throw new InstagramException('Missing "ClientId" key not supplied in config');
-        }
-		
-		if (!$config['ClientSecret']) {
-            throw new InstagramException('Missing "ClientSecret" key not supplied in config');
-        }
-		
 		$this->app = new InstagramApp($config['ClientId'], $config['ClientSecret']);	
 		
         $this->setCallbackUrl($config['Callback']);
