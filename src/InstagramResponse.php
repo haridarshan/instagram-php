@@ -25,7 +25,6 @@
  */
 namespace Haridarshan\Instagram;
 
-use stdClass;
 use GuzzleHttp\Psr7\Response;
 use Haridarshan\Instagram\Exceptions\InstagramResponseException;
 

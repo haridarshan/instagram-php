@@ -77,8 +77,6 @@ class Instagram
      * @param array $config
 	 *
 	 * @throws InstagramException|InvalidArgumentException
-	 * 
-	 * @todo validate callback url
      */
     public function __construct(array $config = [])
     {
