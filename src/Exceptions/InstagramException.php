@@ -10,6 +10,7 @@ class InstagramException extends \Exception
     public function getType()
     {
         $message = json_decode($this->message);
+
         return isset($message->Type) ? $message->Type : null;
     }
 }
