@@ -5,6 +5,12 @@ Easy-to-use PHP Library for Instagram APIs (Beta)
 
 > **Note:** Any app created before Nov 17, 2015 will continue to function until June 2016. After June 2016, the app will automatically be moved to Sandbox Mode if it wasn't approved through the review process. The Instagram API requires an access_token from authenticated users for each endpoint. We no longer support making requests using just the client_id.
 
+## Minimum Requirement
+```
+PHP 5.5+ and above
+Below 5.5.0, this library won't work
+```
+
 ##Installation
 
 To install, use composer:
