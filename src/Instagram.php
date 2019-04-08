@@ -89,7 +89,10 @@ class Instagram
 
         $this->app = new InstagramApp($config['ClientId'], $config['ClientSecret']);
 
-        $this->setCallbackUrl($config['Callback']);
+        if (isset($config['Callback'])) {
+            $this->setCallbackUrl($config['Callback']);
+        }
+        
         $this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
 
         $this->client = HelperFactory::getInstance()->client(Constants::API_HOST);
@@ -116,6 +119,10 @@ class Instagram
      */
     public function getLoginUrl(array $parameters)
     {
+        if ($this->callbackUrl === null) {
+            throw new InstagramException('Missing Callback Url', 400);
+        }
+        
         if (!isset($parameters['scope'])) {
             throw new InstagramException('Missing or Invalid Scope permission used', 400);
         }
