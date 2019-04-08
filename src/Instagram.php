@@ -92,7 +92,7 @@ class Instagram
         if (isset($config['Callback'])) {
             $this->setCallbackUrl($config['Callback']);
         }
-        
+
         $this->state = isset($config['State']) ? $config['State'] : substr(md5(rand()), 0, 7);
 
         $this->client = HelperFactory::getInstance()->client(Constants::API_HOST);
